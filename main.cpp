@@ -32,12 +32,15 @@ const GLfloat light_position[] = { 2.0f, 5.0f, 5.0f, 0.0f };
 
 TreeSkeleton tree(4,3);
 
+int TreeWindow, DirectionWindow;
+
 /* GLUT callback Handlers */
 
 static void resize(int width, int height)
 {
     const float ar = (float) width / (float) height;
 
+    glutSetWindow(TreeWindow);
     glViewport(0, 0, width, height);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
@@ -45,12 +48,16 @@ static void resize(int width, int height)
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity() ;
+
+    glutSetWindow(DirectionWindow);
+    glutPositionWindow(0, height-150);
+    glViewport(0, 0, 150, 150);
+
 }
 
 static void display(void)
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    // glColor3d(0,0,0);
     glLoadIdentity();
     gluLookAt(eye[0],eye[1],eye[2],0,0,0,0,1,0);
 
@@ -60,6 +67,63 @@ static void display(void)
 
     glutSwapBuffers();
 }
+
+static void xyz()
+{
+    glColor3f(1,0,0);
+    glRasterPos2f(0.8,-0.9);
+    glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, 'X');
+    glColor3f(0,1,0);
+    glRasterPos2f(0.15,-0.9);
+    glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, 'Y');
+    glColor3f(0,0,1);
+    glRasterPos2f(-0.5,-0.9);
+    glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, 'Z');
+}
+
+static void displaydir(void)
+{
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    glOrtho(-1,1,-1,1,1,3);
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    gluLookAt(0,0,-1,0,0,0,0,1,0);
+    xyz();
+
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    glFrustum(-1, 1, -1.0, 1.0, 3.0, 10.0);
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+
+    gluLookAt(eye[0]/2,eye[1]/2,eye[2]/2,0,0,0,0,1,0);
+
+    glPushMatrix();
+        glEnable(GL_COLOR_MATERIAL);
+        glBegin(GL_LINES);
+            glColor3f(1,0,0);
+            glVertex3f(0,0,0);
+            glVertex3f(1,0,0);
+        glEnd();
+        glBegin(GL_LINES);
+            glColor3f(0,1,0);
+            glVertex3f(0,0,0);
+            glVertex3f(0,1,0);
+        glEnd();
+        glBegin(GL_LINES);
+            glColor3f(0,0,1);
+            glVertex3f(0,0,0);
+            glVertex3f(0,0,1);
+        glEnd();
+        glDisable(GL_COLOR_MATERIAL);
+    glPopMatrix();
+
+    glutSwapBuffers();
+}
+
 
 static void specialKey(int key, int x, int y)
 {
@@ -92,6 +156,9 @@ static void specialKey(int key, int x, int y)
         eye[2] = smaller_radius*cos(sideangle);
     }
 
+    glutSetWindow(TreeWindow);
+    glutPostRedisplay();
+    glutSetWindow(DirectionWindow);
     glutPostRedisplay();
 }
 
@@ -109,10 +176,10 @@ static void key(unsigned char key, int x, int y)
     glutPostRedisplay();
 }
 
-static void idle(void)
-{
-    glutPostRedisplay();
-}
+// static void idle(void)
+// {
+//     glutPostRedisplay();
+// }
 
 /* Program entry point */
 
@@ -123,12 +190,12 @@ int main(int argc, char *argv[])
     glutInitWindowPosition(10,10);
     glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
 
-    glutCreateWindow("Tree Animation");
+    TreeWindow = glutCreateWindow("Tree Animation");
 
     glutReshapeFunc(resize);
     glutDisplayFunc(display);
     glutKeyboardFunc(key);
-    glutIdleFunc(idle);
+    // glutIdleFunc(idle);
     glutSpecialFunc(specialKey);
 
     glClearColor(1,1,1,1);
@@ -148,7 +215,14 @@ int main(int argc, char *argv[])
     // glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
     glLightfv(GL_LIGHT0, GL_POSITION, light_position);
     glDisable(GL_COLOR_MATERIAL);
-    
+   
+    DirectionWindow = glutCreateSubWindow(TreeWindow, 0, glutGet(GLUT_WINDOW_HEIGHT)-150, 150, 150);
+    glutDisplayFunc(displaydir);
+    glutKeyboardFunc(key);
+    glutSpecialFunc(specialKey);
+
+    glutSetWindow(TreeWindow);
+
     tree.makeTree();
 
     glutMainLoop();
