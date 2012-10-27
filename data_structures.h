@@ -1,6 +1,7 @@
 #ifndef DATA_STRUCTURES_H_INCLUDED
 #define DATA_STRUCTURES_H_INCLUDED
 
+#include <iostream>
 #include <algorithm>
 #include <math.h>
 
@@ -32,6 +33,7 @@ class vec3
         vec3(triplet a);
         void copy(vec3 a);
         void set(double , double , double);
+        void printvec();
         vec3 operator + (const vec3 &c) const;
         vec3 operator - (const vec3 &c) const;
         vec3 operator * (const vec3 &c) const;

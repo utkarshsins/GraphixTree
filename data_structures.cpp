@@ -78,6 +78,11 @@ void vec3 :: set(double a, double b, double c)
     values[2] = c;
 }
 
+void vec3 :: printvec()
+{
+    std::cout << values[0] << "," << values[1] << "," << values[2];
+}
+
 const double& vec3 :: operator [] (int index) const
 {
     return values[index];

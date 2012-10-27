@@ -9,7 +9,7 @@ class TreeSkeleton
         Branch* branches;
         int total_branches;
         int depth_count, flat_count;
-        double branch_length, branch_thickness;
+        double branch_length, branch_thickness, branch_delta;
 
         TreeSkeleton();
         TreeSkeleton(int , int );
