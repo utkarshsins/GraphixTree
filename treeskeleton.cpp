@@ -57,9 +57,9 @@ void TreeSkeleton :: makeTree()
             //int ref = ceil();
             //branches[start_index+j] = new Branch();
             int ref = start_index - (prev_count - j);
-            for(int k = 0; k < (i==0? 1 : 3); k++)
+            for(int k = 0; k < (i==0? 1 : flat_count); k++)
             {
-                int index = start_index + j*3 + k;
+                int index = start_index + j*flat_count + k;
 
                 std::cout   << "[FUNOP] " 
                             << i << "," << j << "," << k 
@@ -72,16 +72,17 @@ void TreeSkeleton :: makeTree()
                     vec3 ref_end;
                     ref_end.copy(branches[ref].end_points.second);
                     double refx = ref_end[0], refy = ref_end[1], refz = ref_end[2];
-                    double angle = (2*k+1)*1.0*M_PI / (2*flat_count*1.0);
-                    std::cout << "[FUNOP] Angle : " << (angle/M_PI*180.0) << std::endl;
+					double anglez = M_PI/4.0;
+					double angley = 2.0*M_PI*(double) k/(double) flat_count;
+					double base_length = branch_length*cos(anglez);
                     branches[index].set
                         (
                             ref_end, 
                             vec3
                                 (
-                                    refx+branch_length*cos(angle), 
-                                    refy+branch_length*sin(angle), 
-                                    refz
+                                    refx+base_length*cos(angley), 
+									refy+branch_length*sin(anglez), 
+									refz+base_length*sin(angley)
                                 ), 
                             branches[ref].endthickness,
                             branches[ref].endthickness - branch_delta,

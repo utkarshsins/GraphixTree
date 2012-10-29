@@ -67,7 +67,7 @@ void Branch :: paint()
     double angle = acos(yn/sqrt(xn*xn+yn*yn+zn*zn)) * 180/M_PI;
     glPushMatrix();
         glTranslated(end_points.first[0], end_points.first[1], end_points.first[2]);
-        glRotated(angle, (-length*zn), 0, length*xn);
+        glRotated(-angle, (-length*zn), 0, length*xn);
         glRotated(-90, 1, 0, 0);
 
         Leaf::setMaterial();
