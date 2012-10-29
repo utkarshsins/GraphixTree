@@ -23,7 +23,7 @@ double upangle = 0;
 double sideangle = 0;
 double upangle_inc = 10*M_PI/180;
 double sideangle_inc = 10*M_PI/180;
-
+double time;
 
 const GLfloat light_ambient[]  = { 0.0f, 0.0f, 0.0f, 1.0f };
 const GLfloat light_diffuse[]  = { 1.0f, 1.0f, 1.0f, 1.0f };
@@ -31,6 +31,7 @@ const GLfloat light_specular[] = { 1.0f, 1.0f, 1.0f, 1.0f };
 const GLfloat light_position[] = { 2.0f, 5.0f, 5.0f, 0.0f };
 
 TreeSkeleton tree(4,6);
+Wind wind(5,5,5);
 
 int TreeWindow, DirectionWindow;
 
@@ -61,8 +62,9 @@ static void display(void)
     glLoadIdentity();
     gluLookAt(eye[0],eye[1],eye[2],0,0,0,0,1,0);
 
+    time += 1;
     glPushMatrix();
-        tree.paint();
+        tree.paint(time, wind);
     glPopMatrix();
 
     glutSwapBuffers();

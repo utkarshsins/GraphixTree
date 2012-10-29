@@ -83,7 +83,8 @@ void TreeSkeleton :: makeTree()
                                 ),
                             branches[ref].endthickness,
                             branches[ref].endthickness - branch_delta,
-                            i
+                            i,
+                            branches[ref]
                         );
 
                 }
@@ -95,7 +96,8 @@ void TreeSkeleton :: makeTree()
                             vec3(0, branch_length, 0),
                             branch_thickness,
                             branch_thickness - branch_delta,
-                            0
+                            0,
+                            branches[ref]
                         );
                 }
                 std::cout << std::endl;
@@ -110,11 +112,11 @@ void TreeSkeleton :: makeTree()
 
 }
 
-void TreeSkeleton :: paint()
+void TreeSkeleton :: paint(double time, Wind wind)
 {
     for(int i = 0; i < total_branches; i++)
     {
-        branches[i].paint();
+        branches[i].paint(time, wind);
     }
 }
 
