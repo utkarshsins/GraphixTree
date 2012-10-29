@@ -1,4 +1,6 @@
 #include "leaf.h"
+#include "Debug.h"
+
 #include <cstdlib>
 
 #include <GL/glut.h>
@@ -42,7 +44,8 @@ void Leaf::set(double length)
     thetabranch = random(30,90);
     thetabranch360 = random(0,360);
     theta360 = random(0,360);
-    std::cout << "[LEAFL] " << length_fraction << std::endl;
+	if(VERBOSE)
+		std::cout << "[LEAFL] " << length_fraction << std::endl;
 }
 
 void Leaf::paint()

@@ -16,8 +16,6 @@
 #include "data_structures.h"
 #include "leaf.h"
 
-#define MAX_LEAVES 8
-
 using namespace std;
 
 class Branch

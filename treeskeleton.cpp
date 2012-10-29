@@ -36,7 +36,8 @@ void TreeSkeleton :: makeTree()
     int prev_count = 1;
     int step_count = 1;
 
-    std::cout << "[INFUN] Make Tree" << std::endl;
+	if(VERBOSE)
+		std::cout << "[INFUN] Make Tree" << std::endl;
 
     for(int i = 0; i < depth_count; i++)
     {
@@ -61,11 +62,12 @@ void TreeSkeleton :: makeTree()
             {
                 int index = start_index + j*flat_count + k;
 
-                std::cout   << "[FUNOP] " 
-                            << i << "," << j << "," << k 
-                            << " : " 
-                            << index 
-                            << std::endl;
+				if(VERBOSE)
+					std::cout   << "[FUNOP] " 
+								<< i << "," << j << "," << k 
+								<< " : " 
+								<< index 
+								<< std::endl;
 
                 if(ref >= 0)
                 {
@@ -108,7 +110,8 @@ void TreeSkeleton :: makeTree()
         prev_count = step_count;
     }
 
-    std::cout << "[OUTFN] Make Tree" << std::endl;
+	if(VERBOSE)
+		std::cout << "[OUTFN] Make Tree" << std::endl;
 
 }
 

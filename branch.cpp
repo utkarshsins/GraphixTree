@@ -35,12 +35,15 @@ Branch :: Branch(vec3 start, vec3 end, double startt, double endt, int depth)
 
 void Branch :: set(vec3 start, vec3 end, double startt, double endt, int depth)
 {
-    std::cout << "[VECOP] Start : " ;
-    start.printvec();
-    std::cout << std::endl;
-    std::cout << "[VECOP] End : ";
-    end.printvec();
-    std::cout << std::endl;
+	if(VERBOSE)
+	{
+		std::cout << "[VECOP] Start : " ;
+		start.printvec();
+		std::cout << std::endl;
+		std::cout << "[VECOP] End : ";
+		end.printvec();
+		std::cout << std::endl;
+	}
 
     end_points = make_pair(start, end);
     startthickness = startt;
@@ -71,11 +74,12 @@ void Branch :: paint()
         glRotated(-90, 1, 0, 0);
 
         Leaf::setMaterial();
-
-        for(int i=0; i<leaves.size(); i++)
-        {
-            leaves[i].paint();
-        }
+		
+		if(RENDER_LEAVES)
+			for(int i=0; i<leaves.size(); i++)
+			{
+				leaves[i].paint();
+			}
 
         glMaterialfv(GL_FRONT, GL_AMBIENT,   mat_ambient);
         glMaterialfv(GL_FRONT, GL_DIFFUSE,   mat_diffuse);
@@ -86,17 +90,21 @@ void Branch :: paint()
         glPushMatrix();
         //glutSolidCube(1.0);
             //glRotated(-90, 1, 0, 0);
-            glBegin(GL_POLYGON);
-                GLUquadricObj* cylinder = gluNewQuadric();
-                gluCylinder(cylinder, startthickness/2, endthickness/2, length, 8 , 10);
-            glEnd();
 
-            glTranslated(0, 0, length);
-            //glRotated(90, 1, 0, 0);
-            glBegin(GL_POLYGON);
-                GLUquadricObj* disc = gluNewQuadric();
-                gluDisk(disc, 0, endthickness/2, 8, 10);
-            glEnd();
+			if(RENDER_BRANCH)
+			{
+				glBegin(GL_POLYGON);
+					GLUquadricObj* cylinder = gluNewQuadric();
+					gluCylinder(cylinder, startthickness/2, endthickness/2, length, 8 , 10);
+				glEnd();
+
+				glTranslated(0, 0, length);
+				//glRotated(90, 1, 0, 0);
+				glBegin(GL_POLYGON);
+					GLUquadricObj* disc = gluNewQuadric();
+					gluDisk(disc, 0, endthickness/2, 8, 10);
+				glEnd();
+			}
 
         glPopMatrix();
         //glTranslated(end_points.second[0], end_points.second[1], end_points.second[2]);

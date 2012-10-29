@@ -5,6 +5,8 @@
 #include <algorithm>
 #include <math.h>
 
+#include "Debug.h"
+
 typedef int pair_int[2];
 typedef double triplet[3];
 typedef double quad[4];
