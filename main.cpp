@@ -30,7 +30,7 @@ const GLfloat light_diffuse[]  = { 1.0f, 1.0f, 1.0f, 1.0f };
 const GLfloat light_specular[] = { 1.0f, 1.0f, 1.0f, 1.0f };
 const GLfloat light_position[] = { 2.0f, 5.0f, 5.0f, 0.0f };
 
-TreeSkeleton tree(4,3);
+TreeSkeleton tree(4,6);
 
 int TreeWindow, DirectionWindow;
 
@@ -215,7 +215,7 @@ int main(int argc, char *argv[])
     // glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
     glLightfv(GL_LIGHT0, GL_POSITION, light_position);
     glDisable(GL_COLOR_MATERIAL);
-   
+
     DirectionWindow = glutCreateSubWindow(TreeWindow, 0, glutGet(GLUT_WINDOW_HEIGHT)-150, 150, 150);
     glutDisplayFunc(displaydir);
     glutKeyboardFunc(key);

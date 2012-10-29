@@ -1,5 +1,6 @@
 #include "treeskeleton.h"
 #include <iostream>
+
 TreeSkeleton::TreeSkeleton()
 {
     flat_count = 2;
@@ -49,24 +50,18 @@ void TreeSkeleton :: makeTree()
         {
             step_count = prev_count * flat_count;
         }
-        //branches[((int) pow(flat_count, i)) - 1 ] = new Branch[flat_count];
-        //int step_count = (int) pow(flat_count, i);
-        //int prev_count = step_count / flat_count;
-        //int start_index = (i > 0 ? );
         for(int j = 0; j < prev_count; j++)
         {
-            //int ref = ceil();
-            //branches[start_index+j] = new Branch();
             int ref = start_index - (prev_count - j);
             for(int k = 0; k < (i==0? 1 : flat_count); k++)
             {
                 int index = start_index + j*flat_count + k;
 
 				if(VERBOSE)
-					std::cout   << "[FUNOP] " 
-								<< i << "," << j << "," << k 
-								<< " : " 
-								<< index 
+					std::cout   << "[FUNOP] "
+								<< i << "," << j << "," << k
+								<< " : "
+								<< index
 								<< std::endl;
 
                 if(ref >= 0)
@@ -79,13 +74,13 @@ void TreeSkeleton :: makeTree()
 					double base_length = branch_length*cos(anglez);
                     branches[index].set
                         (
-                            ref_end, 
+                            ref_end,
                             vec3
                                 (
-                                    refx+base_length*cos(angley), 
-									refy+branch_length*sin(anglez), 
+                                    refx+base_length*cos(angley),
+									refy+branch_length*sin(anglez),
 									refz+base_length*sin(angley)
-                                ), 
+                                ),
                             branches[ref].endthickness,
                             branches[ref].endthickness - branch_delta,
                             i
@@ -96,9 +91,9 @@ void TreeSkeleton :: makeTree()
                 {
                     branches[0].set
                         (
-                            vec3(0,0,0), 
-                            vec3(0, branch_length, 0), 
-                            branch_thickness, 
+                            vec3(0,0,0),
+                            vec3(0, branch_length, 0),
+                            branch_thickness,
                             branch_thickness - branch_delta,
                             0
                         );

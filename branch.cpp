@@ -1,12 +1,12 @@
 #include "branch.h"
 
-const GLfloat Branch::mat_ambient[] = 
+const GLfloat Branch::mat_ambient[] =
     { 0.7f, 0.7f, 0.7f, 1.0f };
-const GLfloat Branch::mat_diffuse[] = 
+const GLfloat Branch::mat_diffuse[] =
     { 0.8f, 0.8f, 0.8f, 1.0f };
-const GLfloat Branch::mat_specular[] = 
+const GLfloat Branch::mat_specular[] =
     { 1.0f, 1.0f, 1.0f, 1.0f };
-const GLfloat Branch::high_shininess[] = 
+const GLfloat Branch::high_shininess[] =
     { 100.0f };
 
 Branch::Branch()
@@ -20,7 +20,7 @@ Branch :: Branch(vec3 start, vec3 end, int depth)
     startthickness = .2;
     endthickness = .2;
     length = dist(start, end);
-    
+
     addleaves(depth*MAX_LEAVES);
 }
 
@@ -74,7 +74,7 @@ void Branch :: paint()
         glRotated(-90, 1, 0, 0);
 
         Leaf::setMaterial();
-		
+
 		if(RENDER_LEAVES)
 			for(int i=0; i<leaves.size(); i++)
 			{
@@ -88,8 +88,6 @@ void Branch :: paint()
 
 
         glPushMatrix();
-        //glutSolidCube(1.0);
-            //glRotated(-90, 1, 0, 0);
 
 			if(RENDER_BRANCH)
 			{
@@ -107,18 +105,6 @@ void Branch :: paint()
 			}
 
         glPopMatrix();
-        //glTranslated(end_points.second[0], end_points.second[1], end_points.second[2]);
     glPopMatrix();
-    /*
-    glPushMatrix();
-        glTranslated(0, 2*length, 0);
-        glRotated(angle, (-length*zn), 0, length*xn);
-        glTranslated(end_points.first[0], end_points.first[1] + 2*length, end_points.first[2]);
-        //glRotated(90, 1, 0, 0);
-        glBegin(GL_POLYGON);
-            GLUquadricObj* disc = gluNewQuadric();
-            gluDisk(disc, 0, thickness/2, 8, 10);
-        glEnd();
-    glPopMatrix();
-    */
+
 }

@@ -26,7 +26,6 @@ class Branch
         vec3 end_boundary[8][2];
 
         vector<Leaf> leaves;
-        // Leaf* leaves;
         void addleaves(int);
 
         Branch();
@@ -36,9 +35,9 @@ class Branch
         void set(vec3 , vec3 , double, double , int );
 
         static const GLfloat mat_ambient[];
-        static const GLfloat mat_diffuse[]; 
-        static const GLfloat mat_specular[]; 
-        static const GLfloat high_shininess[]; 
+        static const GLfloat mat_diffuse[];
+        static const GLfloat mat_specular[];
+        static const GLfloat high_shininess[];
 
 };
 

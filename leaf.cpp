@@ -1,18 +1,12 @@
 #include "leaf.h"
 #include "Debug.h"
 
-#include <cstdlib>
-
-#include <GL/glut.h>
-
-#include <iostream>
-
 const float Leaf::mat_ambient[]    = { 0.0f, 1.0f, 0.0f, 1.0f };
 const float Leaf::mat_diffuse[]    = { 0.0f, 1.0f, 0.0f, 1.0f };
 const float Leaf::mat_specular[]   = { 0.0f, 1.0f, 0.0f, 1.0f };
 const float Leaf::high_shininess[] = { 100.0f };
 
-double random(double min, double max) 
+double random(double min, double max)
 {
     return min + ((double) rand() / RAND_MAX) * (max-min);
 }
@@ -55,9 +49,6 @@ void Leaf::paint()
         glRotated(thetabranch360,0,0,1);
         glRotated(thetabranch,1,0,0);
         glRotated(theta360,0,0,1);
-
-        GLUquadricObj* cylinder = gluNewQuadric();
-        gluCylinder(cylinder, LEAF_THICKNESS, LEAF_THICKNESS/2.0, LEAF_PETIOLE, 8, 10);
 
         glPushMatrix();
             glTranslatef(0,0,LEAF_PETIOLE);
