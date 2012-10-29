@@ -8,10 +8,26 @@
 typedef int pair_int[2];
 typedef double triplet[3];
 typedef double quad[4];
+
+#ifndef M_PI
+#define M_PI 3.14
+#endif
+
+#ifndef min3
 #define min3(a,b,c) ((a<=b?(a<=c?a:c):(b<=c?b:c)))
+#endif
+
+#ifndef max3
 #define max3(a,b,c) ((a>b?(a>c?a:c):(b>c?b:c)))
+#endif
+
+#ifndef min
 #define min(a,b) (a<=b?a:b)
+#endif
+
+#ifndef max
 #define max(a,b) (a>b?a:b)
+#endif
 
 class vec2
 {

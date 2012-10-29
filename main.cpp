@@ -15,10 +15,6 @@
 #include <stdlib.h>
 #include "data_structures.h"
 
-#ifndef M_PI
-#define M_PI 3.14
-#endif
-
 using namespace std;
 
 double eye_radius = 8;
@@ -190,7 +186,7 @@ static void key(unsigned char key, int x, int y)
 int main(int argc, char *argv[])
 {
     glutInit(&argc, argv);
-    glutInitWindowSize(640,480);
+	glutInitWindowSize(glutGet(GLUT_SCREEN_WIDTH),glutGet(GLUT_SCREEN_HEIGHT) - glutGet(GLUT_SCREEN_HEIGHT_MM));
     glutInitWindowPosition(10,10);
     glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
 
