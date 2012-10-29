@@ -15,6 +15,10 @@
 #include <stdlib.h>
 #include "data_structures.h"
 
+#ifndef M_PI
+#define M_PI 3.14
+#endif
+
 using namespace std;
 
 double eye_radius = 8;
