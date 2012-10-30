@@ -121,7 +121,7 @@ void TreeSkeleton :: paint(double time, Wind wind)
     }
     int index = 0, level = 1;
     int prev_index = -1;
-    bool rendered[total_branches];
+	std::vector<bool> rendered(total_branches,false);
     for(int i = 0; i < total_branches; i++)
     {
         rendered[i] = false;
