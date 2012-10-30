@@ -53,6 +53,7 @@ void TreeSkeleton :: makeTree()
         for(int j = 0; j < prev_count; j++)
         {
             int ref = start_index - (prev_count - j);
+			double angley_random = 2.0*M_PI/(double) flat_count*BetaNoise::gauss();
             for(int k = 0; k < (i==0? 1 : flat_count); k++)
             {
                 int index = start_index + j*flat_count + k;
@@ -70,7 +71,7 @@ void TreeSkeleton :: makeTree()
                     ref_end.copy(branches[ref].end_points.second);
                     double refx = ref_end[0], refy = ref_end[1], refz = ref_end[2];
 					double anglez = M_PI/4.0;
-					double angley = 2.0*M_PI*(double) k/(double) flat_count;
+					double angley = 2.0*M_PI*(double) k/(double) flat_count + angley_random;
 					double base_length = branch_length*cos(anglez);
                     branches[index].set
                         (

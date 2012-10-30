@@ -31,7 +31,7 @@ const GLfloat light_diffuse[]  = { 1.0f, 1.0f, 1.0f, 1.0f };
 const GLfloat light_specular[] = { 1.0f, 1.0f, 1.0f, 1.0f };
 const GLfloat light_position[] = { 2.0f, 5.0f, 5.0f, 0.0f };
 
-TreeSkeleton tree(4,4);
+TreeSkeleton tree(4,3);
 Wind wind(2,5,2.5);
 
 int TreeWindow, DirectionWindow;
@@ -186,11 +186,6 @@ void idle(void)
     glutPostRedisplay();
 }
 
-// static void idle(void)
-// {
-//     glutPostRedisplay();
-// }
-
 /* Program entry point */
 
 int main(int argc, char *argv[])
@@ -204,9 +199,8 @@ int main(int argc, char *argv[])
 
     glutReshapeFunc(resize);
     glutDisplayFunc(display);
-    glutIdleFunc(idle);
     glutKeyboardFunc(key);
-    // glutIdleFunc(idle);
+    glutIdleFunc(idle);
     glutSpecialFunc(specialKey);
 
     glClearColor(1,1,1,1);

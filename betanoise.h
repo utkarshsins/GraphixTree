@@ -15,9 +15,9 @@ class BetaNoise
 {
 	public:
 		static std::vector<Complex> noise(int,double);
+		static double gauss();
 
 	private:
-		static double gauss();
 		static void fastfourierinverse(int, std::vector<struct Complex>);
 };
 

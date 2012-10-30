@@ -2,6 +2,7 @@
 #define TREESKELETON_H
 
 #include "branch.h"
+#include "betanoise.h"
 
 class TreeSkeleton
 {
