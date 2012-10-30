@@ -64,6 +64,11 @@ vec3 :: vec3(triplet a)
     values[2] = a[2];
 }
 
+double vec3 :: value()
+{
+    return sqrt(values[0]*values[0] + values[1]*values[1] + values[2]*values[2]);
+}
+
 void vec3 :: copy(vec3 a)
 {
     values[0] = a.values[0];
@@ -78,10 +83,12 @@ void vec3 :: set(double a, double b, double c)
     values[2] = c;
 }
 
-void vec3 :: printvec()
+void vec3 :: printvec(int truth)
 {
-	if(VERBOSE)
+	if(truth)
+	{
 		std::cout << values[0] << "," << values[1] << "," << values[2];
+	}
 }
 
 const double& vec3 :: operator [] (int index) const

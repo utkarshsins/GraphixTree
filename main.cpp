@@ -12,6 +12,7 @@
 #include <iostream>
 #include <stdio.h>
 #include <math.h>
+#include <time.h>
 #include <stdlib.h>
 #include "data_structures.h"
 
@@ -23,15 +24,15 @@ double upangle = 0;
 double sideangle = 0;
 double upangle_inc = 10*M_PI/180;
 double sideangle_inc = 10*M_PI/180;
-double time;
+double global_time;
 
 const GLfloat light_ambient[]  = { 0.0f, 0.0f, 0.0f, 1.0f };
 const GLfloat light_diffuse[]  = { 1.0f, 1.0f, 1.0f, 1.0f };
 const GLfloat light_specular[] = { 1.0f, 1.0f, 1.0f, 1.0f };
 const GLfloat light_position[] = { 2.0f, 5.0f, 5.0f, 0.0f };
 
-TreeSkeleton tree(4,6);
-Wind wind(5,5,5);
+TreeSkeleton tree(4,4);
+Wind wind(2,5,2.5);
 
 int TreeWindow, DirectionWindow;
 
@@ -62,9 +63,9 @@ static void display(void)
     glLoadIdentity();
     gluLookAt(eye[0],eye[1],eye[2],0,0,0,0,1,0);
 
-    time += 1;
+    //global_time += 1;
     glPushMatrix();
-        tree.paint(time, wind);
+        tree.paint(global_time, wind);
     glPopMatrix();
 
     glutSwapBuffers();
@@ -178,6 +179,13 @@ static void key(unsigned char key, int x, int y)
     glutPostRedisplay();
 }
 
+void idle(void)
+{
+    global_time += 1;
+    glutSetWindow(TreeWindow);
+    glutPostRedisplay();
+}
+
 // static void idle(void)
 // {
 //     glutPostRedisplay();
@@ -196,6 +204,7 @@ int main(int argc, char *argv[])
 
     glutReshapeFunc(resize);
     glutDisplayFunc(display);
+    glutIdleFunc(idle);
     glutKeyboardFunc(key);
     // glutIdleFunc(idle);
     glutSpecialFunc(specialKey);
@@ -225,6 +234,7 @@ int main(int argc, char *argv[])
 
     glutSetWindow(TreeWindow);
 
+    srand((unsigned) time(NULL));
     tree.makeTree();
 
     glutMainLoop();

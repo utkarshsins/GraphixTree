@@ -31,7 +31,7 @@ TreeSkeleton :: TreeSkeleton(int dc, int fc, double bl, double bt)
 
 void TreeSkeleton :: makeTree()
 {
-    total_branches = flat_count * ((int) pow(flat_count, depth_count) - 1)/(flat_count-1);
+    total_branches = ((int) pow(flat_count, depth_count) - 1)/(flat_count-1);
     branches = new Branch[total_branches];
     int start_index = 0;
     int prev_count = 1;
@@ -84,7 +84,7 @@ void TreeSkeleton :: makeTree()
                             branches[ref].endthickness,
                             branches[ref].endthickness - branch_delta,
                             i,
-                            branches[ref]
+                            &branches[ref]
                         );
 
                 }
@@ -97,7 +97,7 @@ void TreeSkeleton :: makeTree()
                             branch_thickness,
                             branch_thickness - branch_delta,
                             0,
-                            branches[ref]
+                            NULL
                         );
                 }
                 std::cout << std::endl;
@@ -114,9 +114,127 @@ void TreeSkeleton :: makeTree()
 
 void TreeSkeleton :: paint(double time, Wind wind)
 {
+
     for(int i = 0; i < total_branches; i++)
     {
-        branches[i].paint(time, wind);
+        branches[i].wind_listener(wind, time);
     }
+    int index = 0, level = 1;
+    int prev_index = -1;
+    bool rendered[total_branches];
+    for(int i = 0; i < total_branches; i++)
+    {
+        rendered[i] = false;
+    }
+
+    if(VERBOSE || VERBOSE2)
+    {
+        cout << "pushing index: 0 " << endl;
+
+    }
+    glPushMatrix();
+        glTranslated(branches[0].end_points.first[0], branches[0].end_points.first[1], branches[0].end_points.first[2]);
+        glRotated(branches[0].bent_angle[0], 1, 0, 0);
+        glRotated(branches[0].bent_angle[2], 0, 0, 1);
+        glTranslated(-branches[0].end_points.first[0], -branches[0].end_points.first[1], -branches[0].end_points.first[2]);
+        branches[0].paint(time, wind);
+    rendered[0] = true;
+    index++;
+    prev_index = 0;
+    level++;
+    int f = flat_count;
+    int next_index;
+    while(index < total_branches && index > 0)
+    {
+        //prev_index = index
+        //int level = floor(log(index*(f-1) + 1) / log(flat_count)) + 1;
+        int temp_no = (pow(f,level-1) - 1) / (f-1);
+        if(VERBOSE || VERBOSE2)
+        {
+            cout<<"index : " << index << " level : " << level << endl;
+        }
+        if(!rendered[index])
+        {
+            if(VERBOSE || VERBOSE2)
+            {
+                cout << "pushing " << endl;
+            }
+            glPushMatrix();
+                glTranslated(branches[index].end_points.first[0], branches[index].end_points.first[1], branches[index].end_points.first[2]);
+                glRotated(branches[index].bent_angle[0], 1, 0, 0);
+                glRotated(branches[index].bent_angle[2], 0, 0, 1);
+                glTranslated(-branches[index].end_points.first[0], -branches[index].end_points.first[1], -branches[index].end_points.first[2]);
+                branches[index].paint(time, wind);
+            rendered[index] = true;
+            next_index = ((pow(f,level)-1) / (f-1)) + f*((index - temp_no));
+            if(next_index >= total_branches)
+            {
+                if(((index - temp_no + 1) % f > 0) || index-prev_index > 1)
+                {
+                    prev_index = index;
+                    index++;
+                    if(VERBOSE || VERBOSE2)
+                    {
+                        cout << "popping " << endl;
+                    }
+
+                    glPopMatrix();
+                    continue;
+                }
+                else
+                {
+                    int prev_level_at = ceil((index - temp_no + 1) / f);
+                    prev_index = index;
+                    index = ( (pow(f,level-2)-1)/(f-1) ) + prev_level_at - 1;
+                    level--;
+                    if(VERBOSE || VERBOSE2)
+                    {
+                        cout << "popping " << endl;
+                    }
+                    glPopMatrix();
+                    continue;
+                }
+            }
+            else
+            {
+                prev_index = index;
+                index = next_index;
+                level++;
+                continue;
+            }
+        }
+        else
+        {
+            if(VERBOSE || VERBOSE2)
+            {
+                cout << "popping " << endl;
+            }
+
+            if(((index - temp_no + 1) % f > 0) && prev_index-index > 1)
+            {
+                prev_index = index;
+                index++;
+                glPopMatrix();
+                continue;
+            }
+            else
+            {
+                int prev_level_at = ceil((index - temp_no + 1) / f);
+                prev_index = index;
+                index = ( (pow(f,level-2)-1)/(f-1) ) + prev_level_at - 1;
+                level--;
+                glPopMatrix();
+                continue;
+            }
+        }
+
+    }
+    if(VERBOSE || VERBOSE2)
+    {
+        cout << "Final popping " << endl;
+    }
+
+    glPopMatrix();
+
 }
 

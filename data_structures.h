@@ -50,8 +50,9 @@ class vec3
         vec3(double a, double b, double c);
         vec3(triplet a);
         void copy(vec3 a);
+        double value();
         void set(double , double , double);
-        void printvec();
+        void printvec(int );
         vec3 operator + (const vec3 &c) const;
         vec3 operator - (const vec3 &c) const;
         vec3 operator * (const vec3 &c) const;

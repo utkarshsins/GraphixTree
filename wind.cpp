@@ -21,10 +21,10 @@ double Wind :: force_at(double t, int coord, double value)
     switch(coord)
     {
         case 0: //x
-            return wind_x_t;
+            return wind_x_t ;
         case 1: //y
             return wind_y_t;
         case 2: //z
-            return wind_z_t;
+            return wind_z_t ;
     }
 }

@@ -17,10 +17,13 @@
 #include "data_structures.h"
 #include "leaf.h"
 #include "wind.h"
+#include <time.h>
 
 #define MAX_BENT_X 25
 #define MAX_BENT_Y 25
 #define MAX_BENT_Z 25
+#define VERBOSE2 0
+#define absd(x) (abs((long) x))
 
 using namespace std;
 
@@ -30,6 +33,7 @@ class Branch
         pair<vec3, vec3> end_points;
         //pair<vec3, vec3> new_end_points;
         vec3 bent_angle;
+        //vec3 total_bent_angle;
         vec3 max_bent_angle;
         double maxLoad;
         double elastic_modulus;
@@ -43,7 +47,7 @@ class Branch
         Branch(vec3 , vec3 , int );
         Branch(vec3 , vec3 , double, double , int );
         void paint(double , Wind );
-        void set(vec3 , vec3 , double, double , int , Branch& );
+        void set(vec3 , vec3 , double, double , int , Branch* );
         void copy(Branch );
         void wind_listener(Wind , double );
 
