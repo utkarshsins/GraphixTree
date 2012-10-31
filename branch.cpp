@@ -120,8 +120,8 @@ void Branch :: wind_listener(Wind wind, double program_time)
     //new_end_points = make_pair(parent_branch.new_end_points.second, end_points.second);
     //bent_angle = bent_angle + parent_branch.bent_angle;
     srand(time(NULL));
-    double xload = wind.force_at(program_time, 0, end_points.first[0]) * (1 + (rand()*1.0 / RAND_MAX));
-    double zload = wind.force_at(program_time, 2, end_points.first[2]) * (1 + (rand()*1.0 / RAND_MAX));
+    double xload = wind.force_at(program_time, 0, end_points.first[0]) * (1 /*+ (rand()*1.0 / RAND_MAX)*/);
+    double zload = wind.force_at(program_time, 2, end_points.first[2]) * (1 /*+ (rand()*1.0 / RAND_MAX)*/);
     double spring_constant = (elastic_modulus * endthickness * pow(startthickness-endthickness, 3) ) / (4*pow(length,3));
     spring_constant = sin(.2*program_time) + cos(.2*program_time);
     if(spring_constant == 0)
