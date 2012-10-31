@@ -3,9 +3,9 @@
 const GLfloat Branch::mat_ambient[] =
     { 0.7f, 0.7f, 0.7f, 1.0f };
 const GLfloat Branch::mat_diffuse[] =
-    { 0.8f, 0.8f, 0.8f, 1.0f };
+    { 0.55f, 0.25f, 0.09f, 1.0f };
 const GLfloat Branch::mat_specular[] =
-    { 1.0f, 1.0f, 1.0f, 1.0f };
+    { .55f, .25f, .09f, 1.0f };
 const GLfloat Branch::high_shininess[] =
     { 100.0f };
 
@@ -195,6 +195,7 @@ void Branch :: paint()
     //new_end_points = make_pair(end_points.first, end_points.second);
     double xn = end_points.second[0]-end_points.first[0], yn = end_points.second[1]-end_points.first[1], zn = end_points.second[2]-end_points.first[2];
     double angle = acos(yn/sqrt(xn*xn+yn*yn+zn*zn)) * 180/M_PI;
+
     //wind_listener(wind, time);
     glPushMatrix();
         //glTranslated((parent_branch==NULL ? 0 : parent_branch->end_points.first[0]), (parent_branch==NULL ? 0 : parent_branch->end_points.first[1]), (parent_branch==NULL ? 0 : parent_branch->end_points.first[2]));
