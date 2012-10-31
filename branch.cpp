@@ -120,32 +120,49 @@ void Branch :: wind_listener(Wind wind, double program_time)
     //new_end_points = make_pair(parent_branch.new_end_points.second, end_points.second);
     //bent_angle = bent_angle + parent_branch.bent_angle;
     srand(time(NULL));
-    double xload = wind.force_at(program_time, 0, end_points.first[0]) * (1 /*+ (rand()*1.0 / RAND_MAX)*/);
-    double zload = wind.force_at(program_time, 2, end_points.first[2]) * (1 /*+ (rand()*1.0 / RAND_MAX)*/);
+    double xload = wind.force_at(program_time, 0, end_points.first[0]) * (1 + (rand()*1.0 / RAND_MAX));
+    double zload = wind.force_at(program_time, 2, end_points.first[2]) * (1 + (rand()*1.0 / RAND_MAX));
     double spring_constant = (elastic_modulus * endthickness * pow(startthickness-endthickness, 3) ) / (4*pow(length,3));
-    spring_constant = sin(.2*program_time) + cos(.2*program_time);
+	spring_constant = 5.0*(sin(spring_constant) + cos(spring_constant));
+    //spring_constant = sin(.2*program_time) + cos(.2*program_time);
     if(spring_constant == 0)
     {
         spring_constant = .01;
-    }
-    if(VERBOSE2 || VERBOSE)
-    {
-        //cout << "Spring constant " << spring_constant << endl;
     }
     double dx = xload/spring_constant;
     double dz = zload/spring_constant;
     if(absd(dx) >= length)
     {
-        dx = (dx / absd(dx)) * (length/2);
+        //dx = (dx / absd(dx)) * (length/2);
+		dx = 0;
+		if(VERBOSE2)
+		{
+			cout << "[ERROR] |dx| > length" << endl;
+		}
     }
     if(absd(dz) >= length)
     {
-        dz = (dz / absd(dz)) * (length/2);
+        //dz = (dz / absd(dz)) * (length/2);
+		dz = 0;
+		if(VERBOSE2)
+		{
+			cout << "[ERROR] |dz| > length" << endl;
+		}
     }
-    cout<<" dx : " << dx << " dz : " << dz << " length : " << length << endl;
     bent_angle[0] = asin(dx/length);
     bent_angle[2] = asin(dz/length);
-    bent_angle.printvec(1);
+    if(VERBOSE2 || VERBOSE)
+    {
+		cout << "XLoad : " << xload << endl;
+		cout << "ZLoad : " << zload << endl;
+        cout << "Spring constant " << spring_constant << endl;
+		cout << "\tdx : " << dx << " dz : " << dz << " length : " << length << endl;
+		cout << "Bent Angle : " ;
+		bent_angle.printvec(1);
+		cout << endl << endl;
+		int n;
+		//cin >> n;
+    }
     cout << endl;
     if(VERBOSE || VERBOSE2 && parent_branch != NULL)
     {

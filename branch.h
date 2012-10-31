@@ -22,7 +22,7 @@
 #define MAX_BENT_X 25
 #define MAX_BENT_Y 25
 #define MAX_BENT_Z 25
-#define VERBOSE2 0
+#define VERBOSE2 false
 #define absd(x) (abs((long) x))
 
 using namespace std;
