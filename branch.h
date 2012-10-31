@@ -46,7 +46,7 @@ class Branch
         Branch();
         Branch(vec3 , vec3 , int );
         Branch(vec3 , vec3 , double, double , int );
-        void paint(double , Wind );
+        void paint();
         void set(vec3 , vec3 , double, double , int , Branch* );
         void copy(Branch );
         void wind_listener(Wind , double );

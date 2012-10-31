@@ -16,7 +16,8 @@ class TreeSkeleton
         TreeSkeleton(int , int );
         TreeSkeleton(int , int , double , double );
         void makeTree();
-        void paint(double , Wind );
+        void paint();
+		void nextFrame(double , Wind);
 };
 
 #endif // TREESKELETON_H

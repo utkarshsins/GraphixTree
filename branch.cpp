@@ -172,7 +172,7 @@ void Branch :: wind_listener(Wind wind, double program_time)
     }
 }
 
-void Branch :: paint(double time, Wind wind)
+void Branch :: paint()
 {
     //pair<vec3, vec3> new_end_points;
     //new_end_points = make_pair(end_points.first, end_points.second);

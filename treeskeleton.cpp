@@ -113,13 +113,16 @@ void TreeSkeleton :: makeTree()
 
 }
 
-void TreeSkeleton :: paint(double time, Wind wind)
+void TreeSkeleton :: nextFrame(double time, Wind wind)
 {
-
     for(int i = 0; i < total_branches; i++)
     {
         branches[i].wind_listener(wind, time);
     }
+}
+
+void TreeSkeleton :: paint()
+{
     int index = 0, level = 1;
     int prev_index = -1;
 	std::vector<bool> rendered(total_branches,false);
@@ -138,7 +141,7 @@ void TreeSkeleton :: paint(double time, Wind wind)
         glRotated(branches[0].bent_angle[0], 1, 0, 0);
         glRotated(branches[0].bent_angle[2], 0, 0, 1);
         glTranslated(-branches[0].end_points.first[0], -branches[0].end_points.first[1], -branches[0].end_points.first[2]);
-        branches[0].paint(time, wind);
+        branches[0].paint();
     rendered[0] = true;
     index++;
     prev_index = 0;
@@ -165,7 +168,7 @@ void TreeSkeleton :: paint(double time, Wind wind)
                 glRotated(branches[index].bent_angle[0], 1, 0, 0);
                 glRotated(branches[index].bent_angle[2], 0, 0, 1);
                 glTranslated(-branches[index].end_points.first[0], -branches[index].end_points.first[1], -branches[index].end_points.first[2]);
-                branches[index].paint(time, wind);
+                branches[index].paint();
             rendered[index] = true;
             next_index = ((pow(f,level)-1) / (f-1)) + f*((index - temp_no));
             if(next_index >= total_branches)

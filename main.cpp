@@ -65,10 +65,14 @@ static void display(void)
 
     //global_time += 1;
     glPushMatrix();
-        tree.paint(global_time, wind);
+        tree.paint();
     glPopMatrix();
 
     glutSwapBuffers();
+
+	// Next Frame
+	tree.nextFrame(global_time++, wind);
+	glutPostRedisplay();
 }
 
 static void xyz()
@@ -200,7 +204,7 @@ int main(int argc, char *argv[])
     glutReshapeFunc(resize);
     glutDisplayFunc(display);
     glutKeyboardFunc(key);
-    glutIdleFunc(idle);
+    //glutIdleFunc(idle);
     glutSpecialFunc(specialKey);
 
     glClearColor(1,1,1,1);
