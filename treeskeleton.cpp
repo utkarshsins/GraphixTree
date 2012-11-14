@@ -31,7 +31,14 @@ TreeSkeleton :: TreeSkeleton(int dc, int fc, double bl, double bt)
 
 void TreeSkeleton :: makeTree()
 {
-    total_branches = ((int) pow(flat_count, depth_count) - 1)/(flat_count-1);
+    if(flat_count > 1)
+    {
+        total_branches = ((int) pow(flat_count, depth_count) - 1)/(flat_count-1);
+    }
+    else
+    {
+        total_branches = flat_count*depth_count;
+    }
     branches = new Branch[total_branches];
     int start_index = 0;
     int prev_count = 1;
@@ -63,6 +70,8 @@ void TreeSkeleton :: makeTree()
 								<< i << "," << j << "," << k
 								<< " : "
 								<< index
+								<< " child of : "
+								<< ref
 								<< std::endl;
 
                 if(ref >= 0)
@@ -73,6 +82,20 @@ void TreeSkeleton :: makeTree()
 					double anglez = M_PI/4.0;
 					double angley = 2.0*M_PI*(double) k/(double) flat_count + angley_random;
 					double base_length = branch_length*cos(anglez);
+
+                    if(VERBOSE)
+                    {
+                        std::cout << "end points : ";
+                        ref_end.printvec(1);
+                        std::cout << std::endl;
+                        std::cout << refx+base_length*cos(angley)
+                                  << " , "
+								  << refy+branch_length*sin(anglez)
+								  << " , "
+								  << refz+base_length*sin(angley);
+                        std::cout << std::endl;
+                    }
+
                     branches[index].set
                         (
                             ref_end,
@@ -137,10 +160,10 @@ void TreeSkeleton :: paint()
 
     }
     glPushMatrix();
-        glTranslated(branches[0].end_points.first[0], branches[0].end_points.first[1], branches[0].end_points.first[2]);
+        //glTranslated(branches[0].end_points.first[0], branches[0].end_points.first[1], branches[0].end_points.first[2]);
         glRotated(branches[0].bent_angle[0], 1, 0, 0);
         glRotated(branches[0].bent_angle[2], 0, 0, 1);
-        glTranslated(-branches[0].end_points.first[0], -branches[0].end_points.first[1], -branches[0].end_points.first[2]);
+        //glTranslated(-branches[0].end_points.first[0], -branches[0].end_points.first[1], -branches[0].end_points.first[2]);
         branches[0].paint();
     rendered[0] = true;
     index++;
@@ -152,7 +175,15 @@ void TreeSkeleton :: paint()
     {
         //prev_index = index
         //int level = floor(log(index*(f-1) + 1) / log(flat_count)) + 1;
-        int temp_no = (pow(f,level-1) - 1) / (f-1);
+        int temp_no;
+        if(f > 1)
+        {
+            temp_no = (pow(f,level-1) - 1) / (f-1);
+        }
+        else
+        {
+            temp_no = level - 1;
+        }
         if(VERBOSE || VERBOSE2)
         {
             cout<<"index : " << index << " level : " << level << endl;
@@ -170,39 +201,50 @@ void TreeSkeleton :: paint()
                 glTranslated(-branches[index].end_points.first[0], -branches[index].end_points.first[1], -branches[index].end_points.first[2]);
                 branches[index].paint();
             rendered[index] = true;
-            next_index = ((pow(f,level)-1) / (f-1)) + f*((index - temp_no));
-            if(next_index >= total_branches)
-            {
-                if(((index - temp_no + 1) % f > 0) || index-prev_index > 1)
-                {
-                    prev_index = index;
-                    index++;
-                    if(VERBOSE || VERBOSE2)
-                    {
-                        cout << "popping " << endl;
-                    }
 
-                    glPopMatrix();
-                    continue;
+            if(f > 1)
+            {
+                next_index = ((pow(f,level)-1) / (f-1)) + f*((index - temp_no));
+                if(next_index >= total_branches)
+                {
+                    if(((index - temp_no + 1) % f > 0) || index-prev_index > 1)
+                    {
+                        prev_index = index;
+                        index++;
+                        if(VERBOSE || VERBOSE2)
+                        {
+                            cout << "popping " << endl;
+                        }
+
+                        glPopMatrix();
+                        continue;
+                    }
+                    else
+                    {
+                        int prev_level_at = ceil((index - temp_no + 1) / f);
+                        prev_index = index;
+                        index = ( (pow(f,level-2)-1)/(f-1) ) + prev_level_at - 1;
+                        level--;
+                        if(VERBOSE || VERBOSE2)
+                        {
+                            cout << "popping " << endl;
+                        }
+                        glPopMatrix();
+                        continue;
+                    }
                 }
                 else
                 {
-                    int prev_level_at = ceil((index - temp_no + 1) / f);
                     prev_index = index;
-                    index = ( (pow(f,level-2)-1)/(f-1) ) + prev_level_at - 1;
-                    level--;
-                    if(VERBOSE || VERBOSE2)
-                    {
-                        cout << "popping " << endl;
-                    }
-                    glPopMatrix();
+                    index = next_index;
+                    level++;
                     continue;
                 }
             }
             else
             {
-                prev_index = index;
-                index = next_index;
+                index++;
+                prev_index = index - 1;
                 level++;
                 continue;
             }
