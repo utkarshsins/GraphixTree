@@ -31,7 +31,7 @@ const GLfloat light_diffuse[]  = { 1.0f, 1.0f, 1.0f, 1.0f };
 const GLfloat light_specular[] = { 1.0f, 1.0f, 1.0f, 1.0f };
 const GLfloat light_position[] = { 2.0f, 5.0f, 5.0f, 0.0f };
 
-TreeSkeleton tree(4,1);
+TreeSkeleton tree(3,2);
 Wind wind(2,5,2.5);
 
 int TreeWindow, DirectionWindow;

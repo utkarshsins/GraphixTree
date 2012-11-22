@@ -17,7 +17,7 @@ Branch::Branch()
     startthickness = .2;
     endthickness = .2;
     length = .5;
-    elastic_modulus = 1;
+    elastic_modulus = E_MODULUS;
     addleaves(0*MAX_LEAVES);
 
 }
@@ -29,7 +29,7 @@ Branch :: Branch(vec3 start, vec3 end, int depth)
     max_bent_angle.set(MAX_BENT_X, MAX_BENT_Y, MAX_BENT_Z);
     startthickness = .2;
     endthickness = .2;
-    elastic_modulus = 1;
+    elastic_modulus = E_MODULUS;
     length = dist(start, end);
 
     addleaves(depth*MAX_LEAVES);
@@ -44,7 +44,7 @@ Branch :: Branch(vec3 start, vec3 end, double startt, double endt, int depth)
     startthickness = startt;
     endthickness = endt;
     length = dist(start, end);
-    elastic_modulus = 1;
+    elastic_modulus = E_MODULUS;
     addleaves(depth*MAX_LEAVES);
 
 }
@@ -80,8 +80,7 @@ void Branch :: set(vec3 start, vec3 end, double startt, double endt, int depth, 
     endthickness = endt;
     length = dist(start, end);
     addleaves(depth*MAX_LEAVES);
-    parent_branch = branch;
-    elastic_modulus = 1;
+    elastic_modulus = E_MODULUS;
 
 }
 
@@ -102,7 +101,7 @@ void Branch :: wind_listener(Wind wind, double program_time)
     double xload = wind.force_at(program_time, 0, end_points.first[0]) * (1 + (rand()*1.0 / RAND_MAX));
     double zload = wind.force_at(program_time, 2, end_points.first[2]) * (1 + (rand()*1.0 / RAND_MAX));
     double spring_constant = (elastic_modulus * endthickness * pow((startthickness-endthickness), 3) ) / (4*pow(length,3));
-	spring_constant = 5.0*(sin(spring_constant) + cos(spring_constant));
+	//spring_constant = 5.0*(sin(spring_constant) + cos(spring_constant));
     if(spring_constant == 0)
     {
         spring_constant = .01;

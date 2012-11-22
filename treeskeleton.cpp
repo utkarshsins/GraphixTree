@@ -138,7 +138,7 @@ void TreeSkeleton :: makeTree()
 
 void TreeSkeleton :: nextFrame(double time, Wind wind)
 {
-    for(int i = 0; i < total_branches; i++)
+    for(int i = 1; i < total_branches; i++)
     {
         branches[i].wind_listener(wind, time);
     }
@@ -157,13 +157,13 @@ void TreeSkeleton :: paint()
     if(VERBOSE || VERBOSE2)
     {
         cout << "pushing index: 0 " << endl;
-
+        cout << "bent angle : " << branches[0].bent_angle[0] << endl;
     }
     glPushMatrix();
-        //glTranslated(branches[0].end_points.first[0], branches[0].end_points.first[1], branches[0].end_points.first[2]);
-        glRotated(branches[0].bent_angle[0], 1, 0, 0);
-        glRotated(branches[0].bent_angle[2], 0, 0, 1);
-        //glTranslated(-branches[0].end_points.first[0], -branches[0].end_points.first[1], -branches[0].end_points.first[2]);
+        glTranslated(branches[0].end_points.first[0], branches[0].end_points.first[1], branches[0].end_points.first[2]);
+        glRotated(branches[0].bent_angle[0] * (180.0/M_PI), 1, 0, 0);
+        glRotated(branches[0].bent_angle[2] * (180.0/M_PI), 0, 0, 1);
+        glTranslated(-branches[0].end_points.first[0], -branches[0].end_points.first[1], -branches[0].end_points.first[2]);
         branches[0].paint();
     rendered[0] = true;
     index++;
@@ -193,11 +193,12 @@ void TreeSkeleton :: paint()
             if(VERBOSE || VERBOSE2)
             {
                 cout << "pushing " << endl;
+                cout << "bent angle : " << branches[index].bent_angle[0] << endl;
             }
             glPushMatrix();
                 glTranslated(branches[index].end_points.first[0], branches[index].end_points.first[1], branches[index].end_points.first[2]);
-                glRotated(branches[index].bent_angle[0], 1, 0, 0);
-                glRotated(branches[index].bent_angle[2], 0, 0, 1);
+                glRotated(branches[index].bent_angle[0] * (180.0/M_PI), 1, 0, 0);
+                glRotated(branches[index].bent_angle[2] * (180.0/M_PI), 0, 0, 1);
                 glTranslated(-branches[index].end_points.first[0], -branches[index].end_points.first[1], -branches[index].end_points.first[2]);
                 branches[index].paint();
             rendered[index] = true;

@@ -22,8 +22,9 @@
 #define MAX_BENT_X 25
 #define MAX_BENT_Y 25
 #define MAX_BENT_Z 25
-#define VERBOSE2 false
+#define VERBOSE2 true
 #define absd(x) (abs((long) x))
+#define E_MODULUS 1000000
 
 using namespace std;
 
@@ -56,7 +57,6 @@ class Branch
         static const GLfloat mat_specular[];
         static const GLfloat high_shininess[];
 
-        Branch* parent_branch;
 
 };
 
