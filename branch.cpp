@@ -123,7 +123,7 @@ void Branch :: wind_listener(Wind wind, double program_time)
     }
     bent_angle[0] += asin(dx/length);
     bent_angle[2] += asin(dz/length);
-		
+
 	#ifdef VERBOSE2
 		cout << "XLoad : " << xload << endl;
 		cout << "ZLoad : " << zload << endl;

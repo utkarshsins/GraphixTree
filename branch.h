@@ -18,6 +18,7 @@
 #include "leaf.h"
 #include "wind.h"
 #include <time.h>
+#include <cmath>
 
 #define MAX_BENT_X 25
 #define MAX_BENT_Y 25
