@@ -22,6 +22,12 @@
 #define TIME_CURRENT_MILLIS (std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch())).count();
 long long now = TIME_CURRENT_MILLIS;
 
+// FPS
+#ifdef FPSLIMIT
+long long fpstime = TIME_CURRENT_MILLIS;
+double maxfpstime = 1000.0/MAXFPS; // 1000 msec / fps
+#endif
+
 using namespace std;
 
 double eye_radius = 8;
@@ -63,8 +69,13 @@ static void resize(int width, int height)
 
 }
 
-static void display(void)
+static void redisplay(int value)
 {
+	glutPostRedisplay();
+}
+
+static void display(void)
+{ 
 	#ifdef PROFILING
 	long long diff = TIME_CURRENT_MILLIS;
 	cout << "[TIME] [DRAW] : " << diff - now << endl;
@@ -94,7 +105,16 @@ static void display(void)
 
 	// Next Frame
 	tree.nextFrame(global_time++, wind);
-	glutPostRedisplay();
+
+	#ifdef FPSLIMIT
+		long long fpsnow = TIME_CURRENT_MILLIS;
+		if(fpsnow - fpstime > 10)
+			glutPostRedisplay();
+		else glutTimerFunc(fpsnow-fpstime, redisplay,0);
+		fpstime = fpsnow;
+	#else
+		glutPostRedisplay();
+	#endif
 	
 	#ifdef PROFILING
 	diff = TIME_CURRENT_MILLIS;
@@ -208,13 +228,6 @@ static void key(unsigned char key, int x, int y)
 
     }
 
-    glutPostRedisplay();
-}
-
-void idle(void)
-{
-    global_time += 1;
-    glutSetWindow(TreeWindow);
     glutPostRedisplay();
 }
 
