@@ -38,8 +38,9 @@ void Leaf::set(double length)
     thetabranch = random(30,90);
     thetabranch360 = random(0,360);
     theta360 = random(0,360);
-	if(VERBOSE)
+		#ifdef VERBOSE
 		std::cout << "[LEAFL] " << length_fraction << std::endl;
+		#endif
 }
 
 void Leaf::paint()

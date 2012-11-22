@@ -52,7 +52,7 @@ class vec3
         void copy(vec3 a);
         double value();
         void set(double , double , double);
-        void printvec(int );
+        void printvec();
         vec3 operator + (const vec3 &c) const;
         vec3 operator - (const vec3 &c) const;
         vec3 operator * (const vec3 &c) const;

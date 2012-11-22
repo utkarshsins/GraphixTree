@@ -63,15 +63,14 @@ void Branch :: copy(Branch b)
 
 void Branch :: set(vec3 start, vec3 end, double startt, double endt, int depth, Branch *branch)
 {
-	if(VERBOSE)
-	{
+	#ifdef VERBOSE
 		std::cout << "[VECOP] Start : " ;
-		start.printvec(VERBOSE);
+		start.printvec();
 		std::cout << std::endl;
 		std::cout << "[VECOP] End : ";
-		end.printvec(VERBOSE);
+		end.printvec();
 		std::cout << std::endl;
-	}
+	#endif
 
     end_points = make_pair(start, end);
     bent_angle.set(0,0,0);
@@ -98,9 +97,9 @@ void Branch :: addleaves(int leavesmax)
 void Branch :: wind_listener(Wind wind, double program_time)
 {
     srand(time(NULL));
-    double xload = wind.force_at(program_time, 0, end_points.first[0]) * (1 + (rand()*1.0 / RAND_MAX));
-    double zload = wind.force_at(program_time, 2, end_points.first[2]) * (1 + (rand()*1.0 / RAND_MAX));
-    double spring_constant = (elastic_modulus * endthickness * pow((startthickness-endthickness), 3) ) / (4*pow(length,3));
+    double xload = wind.force_at(program_time, 0, end_points.first[0]);// * (1 + (rand()*1.0 / RAND_MAX));
+    double zload = wind.force_at(program_time, 2, end_points.first[2]);// * (1 + (rand()*1.0 / RAND_MAX));
+    double spring_constant = (elastic_modulus * endthickness * (startthickness-endthickness)) / (4*pow(length,3));
 	//spring_constant = 5.0*(sin(spring_constant) + cos(spring_constant));
     if(spring_constant == 0)
     {
@@ -108,36 +107,35 @@ void Branch :: wind_listener(Wind wind, double program_time)
     }
     double dx = xload/spring_constant;
     double dz = zload/spring_constant;
-    if(absd(dx) >= length)
+    if(abs(dx) >= length)
     {
         dx = 0;
-		if(VERBOSE2)
-		{
+		#ifdef VERBOSE2
 			cout << "[ERROR] |dx| > length" << endl;
-		}
+		#endif
     }
-    if(absd(dz) >= length)
+    if(abs(dz) >= length)
     {
         dz = 0;
-		if(VERBOSE2)
-		{
+		#ifdef VERBOSE2
 			cout << "[ERROR] |dz| > length" << endl;
-		}
+		#endif
     }
-    bent_angle[0] = asin(dx/length);
-    bent_angle[2] = asin(dz/length);
-    if(VERBOSE2 || VERBOSE)
-    {
+    bent_angle[0] += asin(dx/length);
+    bent_angle[2] += asin(dz/length);
+		
+	#ifdef VERBOSE2
 		cout << "XLoad : " << xload << endl;
 		cout << "ZLoad : " << zload << endl;
         cout << "Spring constant " << spring_constant << endl;
 		cout << "\tdx : " << dx << " dz : " << dz << " length : " << length << endl;
 		cout << "Bent Angle : " ;
-		bent_angle.printvec(1);
+		bent_angle.printvec();
 		cout << endl << endl;
-		int n;
+		//int n;
 		//cin >> n;
-    }
+	#endif
+
     for(int i = 0; i < 3; i++)
     {
         if(abs((long) bent_angle[i]) > max_bent_angle[i]*M_PI/180)

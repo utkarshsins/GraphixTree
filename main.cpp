@@ -15,6 +15,12 @@
 #include <time.h>
 #include <stdlib.h>
 #include "data_structures.h"
+#include "Debug.h"
+
+// TIME
+#include <chrono>
+#define TIME_CURRENT_MILLIS (std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch())).count();
+long long now = TIME_CURRENT_MILLIS;
 
 using namespace std;
 
@@ -59,6 +65,11 @@ static void resize(int width, int height)
 
 static void display(void)
 {
+	#ifdef PROFILING
+	long long diff = TIME_CURRENT_MILLIS;
+	cout << "[TIME] [DRAW] : " << diff - now << endl;
+	now = TIME_CURRENT_MILLIS;
+	#endif
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glLoadIdentity();
     gluLookAt(eye[0],eye[1],eye[2],0,0,0,0,1,0);
@@ -67,12 +78,29 @@ static void display(void)
     glPushMatrix();
         tree.paint();
     glPopMatrix();
-
+	
+	#ifdef PROFILING
+	diff = TIME_CURRENT_MILLIS;
+	cout << "[TIME] [PRESWAP] : " << diff - now << endl;
+	now = TIME_CURRENT_MILLIS;
+	#endif
     glutSwapBuffers();
+
+	#ifdef PROFILING
+	diff = TIME_CURRENT_MILLIS;
+	cout << "[TIME] [POSTSWAP] : " << diff - now << endl;
+	now = TIME_CURRENT_MILLIS;
+	#endif
 
 	// Next Frame
 	tree.nextFrame(global_time++, wind);
 	glutPostRedisplay();
+	
+	#ifdef PROFILING
+	diff = TIME_CURRENT_MILLIS;
+	cout << "[TIME] [POSTREDISPLAY] : " << diff - now << endl << endl;
+	now = TIME_CURRENT_MILLIS;
+	#endif
 }
 
 static void xyz()

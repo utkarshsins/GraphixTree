@@ -44,8 +44,9 @@ void TreeSkeleton :: makeTree()
     int prev_count = 1;
     int step_count = 1;
 
-	if(VERBOSE)
+	#ifdef VERBOSE
 		std::cout << "[INFUN] Make Tree" << std::endl;
+	#endif
 
     for(int i = 0; i < depth_count; i++)
     {
@@ -65,7 +66,7 @@ void TreeSkeleton :: makeTree()
             {
                 int index = start_index + j*flat_count + k;
 
-				if(VERBOSE)
+				#ifdef VERBOSE
 					std::cout   << "[FUNOP] "
 								<< i << "," << j << "," << k
 								<< " : "
@@ -73,6 +74,7 @@ void TreeSkeleton :: makeTree()
 								<< " child of : "
 								<< ref
 								<< std::endl;
+				#endif
 
                 if(ref >= 0)
                 {
@@ -82,11 +84,10 @@ void TreeSkeleton :: makeTree()
 					double anglez = M_PI/4.0;
 					double angley = 2.0*M_PI*(double) k/(double) flat_count + angley_random;
 					double base_length = branch_length*cos(anglez);
-
-                    if(VERBOSE)
-                    {
+					
+					#ifdef VERBOSE
                         std::cout << "end points : ";
-                        ref_end.printvec(1);
+                        ref_end.printvec();
                         std::cout << std::endl;
                         std::cout << refx+base_length*cos(angley)
                                   << " , "
@@ -94,7 +95,7 @@ void TreeSkeleton :: makeTree()
 								  << " , "
 								  << refz+base_length*sin(angley);
                         std::cout << std::endl;
-                    }
+					#endif
 
                     branches[index].set
                         (
@@ -131,8 +132,9 @@ void TreeSkeleton :: makeTree()
         prev_count = step_count;
     }
 
-	if(VERBOSE)
+	#ifdef VERBOSE
 		std::cout << "[OUTFN] Make Tree" << std::endl;
+	#endif
 
 }
 
@@ -140,6 +142,9 @@ void TreeSkeleton :: nextFrame(double time, Wind wind)
 {
     for(int i = 1; i < total_branches; i++)
     {
+		#ifdef VERBOSE2
+			std::cout << "BRANCH [" << i << "]" << std::endl;
+		#endif
         branches[i].wind_listener(wind, time);
     }
 }
@@ -154,11 +159,6 @@ void TreeSkeleton :: paint()
         rendered[i] = false;
     }
 
-    if(VERBOSE || VERBOSE2)
-    {
-        cout << "pushing index: 0 " << endl;
-        cout << "bent angle : " << branches[0].bent_angle[0] << endl;
-    }
     glPushMatrix();
         glTranslated(branches[0].end_points.first[0], branches[0].end_points.first[1], branches[0].end_points.first[2]);
         glRotated(branches[0].bent_angle[0] * (180.0/M_PI), 1, 0, 0);
@@ -184,17 +184,8 @@ void TreeSkeleton :: paint()
         {
             temp_no = level - 1;
         }
-        if(VERBOSE || VERBOSE2)
-        {
-            cout<<"index : " << index << " level : " << level << endl;
-        }
         if(!rendered[index])
         {
-            if(VERBOSE || VERBOSE2)
-            {
-                cout << "pushing " << endl;
-                cout << "bent angle : " << branches[index].bent_angle[0] << endl;
-            }
             glPushMatrix();
                 glTranslated(branches[index].end_points.first[0], branches[index].end_points.first[1], branches[index].end_points.first[2]);
                 glRotated(branches[index].bent_angle[0] * (180.0/M_PI), 1, 0, 0);
@@ -212,11 +203,6 @@ void TreeSkeleton :: paint()
                     {
                         prev_index = index;
                         index++;
-                        if(VERBOSE || VERBOSE2)
-                        {
-                            cout << "popping " << endl;
-                        }
-
                         glPopMatrix();
                         continue;
                     }
@@ -226,10 +212,6 @@ void TreeSkeleton :: paint()
                         prev_index = index;
                         index = ( (pow(f,level-2)-1)/(f-1) ) + prev_level_at - 1;
                         level--;
-                        if(VERBOSE || VERBOSE2)
-                        {
-                            cout << "popping " << endl;
-                        }
                         glPopMatrix();
                         continue;
                     }
@@ -252,10 +234,6 @@ void TreeSkeleton :: paint()
         }
         else
         {
-            if(VERBOSE || VERBOSE2)
-            {
-                cout << "popping " << endl;
-            }
 
             if(((index - temp_no + 1) % f > 0) && prev_index-index > 1)
             {
@@ -275,10 +253,6 @@ void TreeSkeleton :: paint()
             }
         }
 
-    }
-    if(VERBOSE || VERBOSE2)
-    {
-        cout << "Final popping " << endl;
     }
 
     glPopMatrix();
