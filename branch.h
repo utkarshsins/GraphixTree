@@ -24,7 +24,7 @@
 #define MAX_BENT_Y 25
 #define MAX_BENT_Z 25
 #define absd(x) (abs((long) x))
-#define E_MODULUS 200000
+#define E_MODULUS 20000
 
 using namespace std;
 

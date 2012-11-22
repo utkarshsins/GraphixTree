@@ -121,8 +121,8 @@ void Branch :: wind_listener(Wind wind, double program_time)
 			cout << "[ERROR] |dz| > length" << endl;
 		#endif
     }
-    bent_angle[0] += asin(dx/length);
-    bent_angle[2] += asin(dz/length);
+    bent_angle[0] = asin(dx/length);
+    bent_angle[2] = asin(dz/length);
 
 	#ifdef VERBOSE2
 		cout << "XLoad : " << xload << endl;

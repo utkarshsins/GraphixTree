@@ -4,8 +4,8 @@
 //#define VERBOSE
 //#define VERBOSE2
 
-//#define FPSLIMIT
-#define MAXFPS 100
+#define FPSLIMIT
+#define MAXFPS 45
 
 #define MAX_LEAVES 100
 
