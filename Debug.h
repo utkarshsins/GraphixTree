@@ -7,10 +7,25 @@
 #define FPSLIMIT
 #define MAXFPS 45
 
-#define MAX_LEAVES 100
+#define MAX_LEAVES 20
 
 #define RENDER_BRANCH true
-#define RENDER_LEAVES false
+#define RENDER_LEAVES true
+
+#include <chrono>
+#define TIME_CURRENT_MILLIS (std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch())).count();
+
+//#define DEBUG_SINGLE_LEAF
+//#define DEBUG_LEAF_BETA
+
+#define ONEFBETA_SCALE 120.000 // sec. between 2 iterations of noise
+#define ONEFBETA_2POW 7
+#define ONEFBETA_BETA 2
+
+#define LEAF_ROTATION_LIMIT_X 20.0 // Between 30-90
+#define LEAF_ROTATION_LIMIT_Y 30.0
+#define LEAF_ROTATION_LIMIT_Z 40.0
+#define LEAF_ROTATION_X_Z_FACTOR 1.0
 
 //#define PROFILING
 

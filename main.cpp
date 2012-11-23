@@ -18,8 +18,6 @@
 #include "Debug.h"
 
 // TIME
-#include <chrono>
-#define TIME_CURRENT_MILLIS (std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch())).count();
 long long now = TIME_CURRENT_MILLIS;
 
 // FPS
@@ -43,7 +41,7 @@ const GLfloat light_diffuse[]  = { 1.0f, 1.0f, 1.0f, 1.0f };
 const GLfloat light_specular[] = { 1.0f, 1.0f, 1.0f, 1.0f };
 const GLfloat light_position[] = { 2.0f, 5.0f, 5.0f, 0.0f };
 
-TreeSkeleton tree(3,2);
+TreeSkeleton tree(4,4);
 Wind wind(2,5,2.5);
 
 int TreeWindow, DirectionWindow;
@@ -87,7 +85,8 @@ static void display(void)
 
     //global_time += 1;
     glPushMatrix();
-        tree.paint();
+	long long timenow = TIME_CURRENT_MILLIS;
+	tree.paint(timenow);
     glPopMatrix();
 	
 	#ifdef PROFILING

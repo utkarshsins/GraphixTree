@@ -12,6 +12,10 @@
 #endif
 #include <cstdlib>
 #include <iostream>
+#include <vector>
+#include <algorithm>
+#include "betanoise.h"
+#include "Debug.h"
 
 #define LEAF_SCALE 0.05
 #define LEAF_THICKNESS 0.005
@@ -23,11 +27,17 @@ class Leaf
     public:
         double length_fraction,
             thetabranch,
-            thetabranch360,
-            theta360;
+            thetabranch360;
 
-        void paint();
-        void set(double);
+		double thetax, thetay, thetaz;
+
+		#ifdef DEBUG_SINGLE_LEAF
+		void paint(double,bool);
+		#else
+        void paint(double);
+		#endif
+
+        void set(double, bool);
         static void setMaterial();
 
         Leaf();
@@ -37,6 +47,7 @@ class Leaf
         static const float mat_specular[];
         static const float high_shininess[];
 
+		std::vector<double> onefbeta;
 };
 #endif /* __LEAF_H__ */
 

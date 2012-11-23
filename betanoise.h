@@ -15,6 +15,7 @@ class BetaNoise
 {
 	public:
 		static std::vector<Complex> noise(int,double);
+		static std::vector<double> librarynoise(int,double);
 		static double gauss();
 
 	private:

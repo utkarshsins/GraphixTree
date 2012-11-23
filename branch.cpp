@@ -18,7 +18,7 @@ Branch::Branch()
     endthickness = .2;
     length = .5;
     elastic_modulus = E_MODULUS;
-    addleaves(0*MAX_LEAVES);
+    addleaves(0*MAX_LEAVES, false);
 
 }
 
@@ -32,7 +32,7 @@ Branch :: Branch(vec3 start, vec3 end, int depth)
     elastic_modulus = E_MODULUS;
     length = dist(start, end);
 
-    addleaves(depth*MAX_LEAVES);
+    addleaves(depth*MAX_LEAVES, false);
 
 }
 
@@ -45,7 +45,7 @@ Branch :: Branch(vec3 start, vec3 end, double startt, double endt, int depth)
     endthickness = endt;
     length = dist(start, end);
     elastic_modulus = E_MODULUS;
-    addleaves(depth*MAX_LEAVES);
+    addleaves(depth*MAX_LEAVES, false);
 
 }
 
@@ -61,7 +61,11 @@ void Branch :: copy(Branch b)
 
 }
 
+#ifdef DEBUG_LEAF_BETA
+void Branch :: set(vec3 start, vec3 end, double startt, double endt, int depth, bool printbeta, Branch *branch)
+#else
 void Branch :: set(vec3 start, vec3 end, double startt, double endt, int depth, Branch *branch)
+#endif
 {
 	#ifdef VERBOSE
 		std::cout << "[VECOP] Start : " ;
@@ -78,19 +82,25 @@ void Branch :: set(vec3 start, vec3 end, double startt, double endt, int depth, 
     startthickness = startt;
     endthickness = endt;
     length = dist(start, end);
-    addleaves(depth*MAX_LEAVES);
+
+	#ifdef DEBUG_LEAF_BETA
+    addleaves(depth*MAX_LEAVES, printbeta);
+	#else
+	addleaves(depth*MAX_LEAVES, false);
+	#endif
+
     elastic_modulus = E_MODULUS;
 
 }
 
-void Branch :: addleaves(int leavesmax)
+void Branch :: addleaves(int leavesmax, bool printbeta)
 {
     Leaf leaf;
     leaves.insert(leaves.begin(), leavesmax, leaf);
     for(int i=0; i<leavesmax; i++)
     {
         // leaves.push_back(leaf);
-        leaves[i].set(length);
+        leaves[i].set(length, i==0 && printbeta);
     }
 }
 
@@ -145,7 +155,11 @@ void Branch :: wind_listener(Wind wind, double program_time)
     }
 }
 
-void Branch :: paint()
+#ifdef DEBUG_SINGLE_LEAF
+void Branch :: paint(double leaf_time, bool debug)
+#else
+void Branch :: paint(double leaf_time)
+#endif
 {
     double xn = end_points.second[0]-end_points.first[0], yn = end_points.second[1]-end_points.first[1], zn = end_points.second[2]-end_points.first[2];
     double angle = acos(yn/sqrt(xn*xn+yn*yn+zn*zn)) * 180/M_PI;
@@ -158,10 +172,26 @@ void Branch :: paint()
         Leaf::setMaterial();
 
 		if(RENDER_LEAVES)
-			for(int i=0; i<leaves.size(); i++)
+		{
+			int istart = 0;
+
+			#ifdef DEBUG_SINGLE_LEAF
+				if(debug)
+				{
+					leaves[0].paint(leaf_time,true);
+					istart = 1;
+				}
+			#endif
+
+			for(int i=istart; i<leaves.size(); i++)
 			{
-				leaves[i].paint();
+				#ifdef DEBUG_SINGLE_LEAF
+				leaves[i].paint(leaf_time,false);
+				#else
+				leaves[i].paint(leaf_time);
+				#endif
 			}
+		}
 
         glMaterialfv(GL_FRONT, GL_AMBIENT,   mat_ambient);
         glMaterialfv(GL_FRONT, GL_DIFFUSE,   mat_diffuse);

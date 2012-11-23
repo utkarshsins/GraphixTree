@@ -109,6 +109,9 @@ void TreeSkeleton :: makeTree()
                             branches[ref].endthickness,
                             branches[ref].endthickness - branch_delta,
                             i,
+							#ifdef DEBUG_LEAF_BETA
+								index==1,
+							#endif
                             &branches[ref]
                         );
 
@@ -122,6 +125,9 @@ void TreeSkeleton :: makeTree()
                             branch_thickness,
                             branch_thickness - branch_delta,
                             0,
+							#ifdef DEBUG_LEAF_BETA
+								false,
+							#endif
                             NULL
                         );
                 }
@@ -149,10 +155,13 @@ void TreeSkeleton :: nextFrame(double time, Wind wind)
     }
 }
 
-void TreeSkeleton :: paint()
+void TreeSkeleton :: paint(long long now)
 {
     int index = 0, level = 1;
     int prev_index = -1;
+
+	double val = fmod((long double) now / 1000.0, ONEFBETA_SCALE) / ONEFBETA_SCALE;
+	std::cout << "VAL : " << val << "\t\t\tTIME : " << (now / 1000) % 1000 << "\t\t\t";
 	std::vector<bool> rendered(total_branches,false);
     for(int i = 0; i < total_branches; i++)
     {
@@ -164,7 +173,11 @@ void TreeSkeleton :: paint()
         glRotated(branches[0].bent_angle[0] * (180.0/M_PI), 1, 0, 0);
         glRotated(branches[0].bent_angle[2] * (180.0/M_PI), 0, 0, 1);
         glTranslated(-branches[0].end_points.first[0], -branches[0].end_points.first[1], -branches[0].end_points.first[2]);
-        branches[0].paint();
+		#ifdef DEBUG_SINGLE_LEAF
+		branches[0].paint(val, false);
+		#else
+		branches[0].paint(val);
+		#endif
     rendered[0] = true;
     index++;
     prev_index = 0;
@@ -191,7 +204,11 @@ void TreeSkeleton :: paint()
                 glRotated(branches[index].bent_angle[0] * (180.0/M_PI), 1, 0, 0);
                 glRotated(branches[index].bent_angle[2] * (180.0/M_PI), 0, 0, 1);
                 glTranslated(-branches[index].end_points.first[0], -branches[index].end_points.first[1], -branches[index].end_points.first[2]);
-                branches[index].paint();
+				#ifdef DEBUG_SINGLE_LEAF
+				branches[index].paint(val,index==1);
+				#else
+                branches[index].paint(val);
+				#endif
             rendered[index] = true;
 
             if(f > 1)
@@ -257,5 +274,7 @@ void TreeSkeleton :: paint()
 
     glPopMatrix();
 
+	//std::cout	<< "====================================================================================="
+	//			<< std::endl;
 }
 

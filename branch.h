@@ -42,13 +42,24 @@ class Branch
         vec3 end_boundary[8][2];
 
         vector<Leaf> leaves;
-        void addleaves(int);
+        void addleaves(int,bool);
 
         Branch();
         Branch(vec3 , vec3 , int );
         Branch(vec3 , vec3 , double, double , int );
-        void paint();
-        void set(vec3 , vec3 , double, double , int , Branch* );
+
+		#ifdef DEBUG_SINGLE_LEAF
+		void paint(double,bool);
+		#else
+        void paint(double);
+		#endif
+
+		#ifdef DEBUG_LEAF_BETA
+        void set(vec3 , vec3 , double, double , int , bool , Branch* );
+		#else
+		void set(vec3 , vec3 , double, double , int , Branch* );
+		#endif	
+
         void copy(Branch );
         void wind_listener(Wind , double );
 

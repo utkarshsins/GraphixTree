@@ -1,4 +1,7 @@
 #include "betanoise.h"
+#include "Debug.h"
+#include "colornoise.h"
+#include <algorithm>
 #include <iostream>
 
 #define M_PI 3.141592654
@@ -125,6 +128,42 @@ std::vector<Complex> BetaNoise::noise(int exp2, double beta)
 	fastfourierinverse(exp2, noisearr);
 
 	return noisearr;
+}
+
+std::vector<double> BetaNoise::librarynoise(int exp2, double beta)
+{
+	// ONE-BY-F^(BETA) IMPLEMENTATION
+
+	std::vector<double> onefbeta;
+
+	//int seed = random(123456780,123456790);
+	int seed = 123456789;
+	int num = pow(2.0,exp2);
+	double * x = f_alpha(num, 1.0, beta, &seed); // f_alpha(no. of values, variance, beta, rand-seed)
+	for(int i =0; i<num; i++)
+		onefbeta.push_back(x[i]);
+
+	onefbeta[0] = 0;		// Hack to establish continuity between time-periods
+	onefbeta[num-1] = 0;	// Hack to establish continuity between time-periods
+
+	double result = * std::max_element(onefbeta.begin(), onefbeta.end());
+	if(result!=0)
+		for(int i = 0; i<num; i++)
+		{
+			onefbeta[i] /= result;	// Normalize
+		}
+
+	// Hack to establish smooth continuity
+	for(int i = num-2; i>0; i--)
+		if(abs(onefbeta[i]) < 0.1)
+		{
+			onefbeta[i+1] = 0;
+			onefbeta.resize(i+2,0);
+			num = i+2;
+			break;
+		}
+		
+	return onefbeta;
 }
 
 //int main(int argc, char *argv[])
