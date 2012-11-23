@@ -130,14 +130,24 @@ std::vector<Complex> BetaNoise::noise(int exp2, double beta)
 	return noisearr;
 }
 
+double randomnoise(double min, double max)
+{
+    return min + ((double) rand() / RAND_MAX) * (max-min);
+}
+
+static bool abs_compare(double a, double b)
+{
+    return (std::fabs(a) < std::fabs(b));
+}
+
 std::vector<double> BetaNoise::librarynoise(int exp2, double beta)
 {
 	// ONE-BY-F^(BETA) IMPLEMENTATION
 
 	std::vector<double> onefbeta;
 
-	//int seed = random(123456780,123456790);
-	int seed = 123456789;
+	int seed = randomnoise(123456780,123456790);
+	//int seed = 123456789;
 	int num = pow(2.0,exp2);
 	double * x = f_alpha(num, 1.0, beta, &seed); // f_alpha(no. of values, variance, beta, rand-seed)
 	for(int i =0; i<num; i++)
@@ -146,7 +156,7 @@ std::vector<double> BetaNoise::librarynoise(int exp2, double beta)
 	onefbeta[0] = 0;		// Hack to establish continuity between time-periods
 	onefbeta[num-1] = 0;	// Hack to establish continuity between time-periods
 
-	double result = * std::max_element(onefbeta.begin(), onefbeta.end());
+	double result = std::fabs(* std::max_element(onefbeta.begin(), onefbeta.end(), abs_compare));
 	if(result!=0)
 		for(int i = 0; i<num; i++)
 		{
