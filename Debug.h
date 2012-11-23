@@ -4,6 +4,10 @@
 //#define VERBOSE
 //#define VERBOSE2
 
+#define ROTATE
+#define ROTATE_FACTOR 0.01
+#define ROTATEINITIAL true
+
 #define FPSLIMIT
 #define MAXFPS 45
 

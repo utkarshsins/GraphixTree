@@ -26,12 +26,24 @@ long long fpstime = TIME_CURRENT_MILLIS;
 int maxfpstime = 1000/MAXFPS; // 1000 msec / fps
 #endif
 
+// ROTATE
+#ifdef ROTATE
+bool viewrotate = ROTATEINITIAL;
+#endif
+
 using namespace std;
 
-double eye_radius = 8;
-triplet eye = {0,0,eye_radius};
-double upangle = 0;
+double eye_radius = 5;
+double upangle = 10*M_PI/180;
 double sideangle = 0;
+triplet eye = 
+	{
+		sqrt(eye_radius*eye_radius - eye_radius*sin(upangle)*eye_radius*sin(upangle))*sin(sideangle),
+		eye_radius*sin(upangle),
+		sqrt(eye_radius*eye_radius - eye_radius*sin(upangle)*eye_radius*sin(upangle))*cos(sideangle)
+	};
+
+
 double upangle_inc = 10*M_PI/180;
 double sideangle_inc = 10*M_PI/180;
 double global_time;
@@ -72,8 +84,25 @@ static void redisplay(int value)
 	glutPostRedisplay();
 }
 
+#ifdef ROTATE
+static void rotateview()
+{
+	if(viewrotate)
+	{
+		sideangle = fmod(sideangle + sideangle_inc * ROTATE_FACTOR, 2*M_PI);
+		double smaller_radius = sqrt(eye_radius*eye_radius - eye[1]*eye[1]);
+		eye[0] = smaller_radius*sin(sideangle);
+		eye[2] = smaller_radius*cos(sideangle);
+	}
+}
+#endif
+
 static void display(void)
 { 
+	#ifdef ROTATE
+	rotateview();
+	#endif
+
 	#ifdef PROFILING
 	long long diff = TIME_CURRENT_MILLIS;
 	cout << "[TIME] [DRAW] : " << diff - now << endl;
@@ -81,7 +110,7 @@ static void display(void)
 	#endif
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glLoadIdentity();
-    gluLookAt(eye[0],eye[1],eye[2],0,0,0,0,1,0);
+    gluLookAt(eye[0],eye[1],eye[2],0,2,0,0,1,0);
 
     //global_time += 1;
     glPushMatrix();
@@ -219,9 +248,19 @@ static void specialKey(int key, int x, int y)
 
 static void key(unsigned char key, int x, int y)
 {
+	std::cout << "GOT KEY : " << key << std::endl;
     switch (key)
     {
-        case 27 :
+		#ifdef ROTATE
+        case 32 :
+			viewrotate=!viewrotate;
+			glutSetWindow(TreeWindow);
+			glutPostRedisplay();
+			glutSetWindow(DirectionWindow);
+			glutPostRedisplay();
+			break;
+		#endif
+		case 27:
         case 'q':
             exit(0);
             break;

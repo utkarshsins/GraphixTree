@@ -161,7 +161,9 @@ void TreeSkeleton :: paint(long long now)
     int prev_index = -1;
 
 	double val = fmod((long double) now / 1000.0, ONEFBETA_SCALE) / ONEFBETA_SCALE;
+	#ifdef DEBUG_SINGLE_LEAF
 	std::cout << "VAL : " << val << "\t\t\tTIME : " << (now / 1000) % 1000 << "\t\t\t";
+	#endif
 	std::vector<bool> rendered(total_branches,false);
     for(int i = 0; i < total_branches; i++)
     {
