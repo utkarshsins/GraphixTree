@@ -31,10 +31,9 @@ using namespace std;
 class Branch
 {
     public:
-        pair<vec3, vec3> end_points;
-        //pair<vec3, vec3> new_end_points;
+		vec3 init_angle;
+		vec3 current_angle;
         vec3 bent_angle;
-        //vec3 total_bent_angle;
         vec3 max_bent_angle;
         double maxLoad;
         double elastic_modulus;
@@ -45,10 +44,9 @@ class Branch
         void addleaves(int);
 
         Branch();
-        Branch(vec3 , vec3 , int );
-        Branch(vec3 , vec3 , double, double , int );
+        Branch(vec3 , double, int, double = 0.2, double = 0.2);
         void paint();
-        void set(vec3 , vec3 , double, double , int , Branch* );
+        void set(vec3 , double, int, double , double );
         void copy(Branch );
         void wind_listener(Wind , double );
 
@@ -56,7 +54,6 @@ class Branch
         static const GLfloat mat_diffuse[];
         static const GLfloat mat_specular[];
         static const GLfloat high_shininess[];
-
 
 };
 

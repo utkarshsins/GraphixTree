@@ -1,5 +1,6 @@
 #include "treeskeleton.h"
 #include <iostream>
+#include <stack>
 
 TreeSkeleton::TreeSkeleton()
 {
@@ -61,7 +62,7 @@ void TreeSkeleton :: makeTree()
         for(int j = 0; j < prev_count; j++)
         {
             int ref = start_index - (prev_count - j);
-			double angley_random = 2.0*M_PI/(double) flat_count*BetaNoise::gauss();
+			double anglez_random = 360.0/(double) flat_count*BetaNoise::gauss();
             for(int k = 0; k < (i==0? 1 : flat_count); k++)
             {
                 int index = start_index + j*flat_count + k;
@@ -78,54 +79,33 @@ void TreeSkeleton :: makeTree()
 
                 if(ref >= 0)
                 {
-                    vec3 ref_end;
-                    ref_end.copy(branches[ref].end_points.second);
-                    double refx = ref_end[0], refy = ref_end[1], refz = ref_end[2];
-					double anglez = M_PI/4.0;
-					double angley = 2.0*M_PI*(double) k/(double) flat_count + angley_random;
+                    // vec3 ref_end;
+                    // ref_end.copy(branches[ref].end_points.second);
+                    // double refx = ref_end[0], refy = ref_end[1], refz = ref_end[2];
+					double angley = 180.0/4.0;
+					double anglez = 360.0*(double) k/(double) flat_count + anglez_random;
 					double base_length = branch_length*cos(anglez);
-					
-					#ifdef VERBOSE
-                        std::cout << "end points : ";
-                        ref_end.printvec();
-                        std::cout << std::endl;
-                        std::cout << refx+base_length*cos(angley)
-                                  << " , "
-								  << refy+branch_length*sin(anglez)
-								  << " , "
-								  << refz+base_length*sin(angley);
-                        std::cout << std::endl;
-					#endif
 
                     branches[index].set
                         (
-                            ref_end,
-                            vec3
-                                (
-                                    refx+base_length*cos(angley),
-									refy+branch_length*sin(anglez),
-									refz+base_length*sin(angley)
-                                ),
-                            branches[ref].endthickness,
-                            branches[ref].endthickness - branch_delta,
-                            i,
-                            &branches[ref]
-                        );
-
+							vec3(0, angley, anglez),
+							branch_length,
+							i,
+							branches[ref].endthickness,
+							branches[ref].endthickness - branch_delta
+						);
                 }
                 else
                 {
                     branches[0].set
                         (
                             vec3(0,0,0),
-                            vec3(0, branch_length, 0),
+							branch_length,
+							0,
                             branch_thickness,
-                            branch_thickness - branch_delta,
-                            0,
-                            NULL
+                            branch_thickness - branch_delta
                         );
                 }
-                std::cout << std::endl;
             }
         }
         start_index += step_count;
@@ -151,111 +131,62 @@ void TreeSkeleton :: nextFrame(double time, Wind wind)
 
 void TreeSkeleton :: paint()
 {
-    int index = 0, level = 1;
-    int prev_index = -1;
-	std::vector<bool> rendered(total_branches,false);
-    for(int i = 0; i < total_branches; i++)
-    {
-        rendered[i] = false;
-    }
+	#ifdef VERBOSE
+		std::cout << "[INFUN] Paint Tree" << std::endl;
+	#endif
 
-    glPushMatrix();
-        glTranslated(branches[0].end_points.first[0], branches[0].end_points.first[1], branches[0].end_points.first[2]);
-        glRotated(branches[0].bent_angle[0] * (180.0/M_PI), 1, 0, 0);
-        glRotated(branches[0].bent_angle[2] * (180.0/M_PI), 0, 0, 1);
-        glTranslated(-branches[0].end_points.first[0], -branches[0].end_points.first[1], -branches[0].end_points.first[2]);
-        branches[0].paint();
-    rendered[0] = true;
-    index++;
-    prev_index = 0;
-    level++;
-    int f = flat_count;
-    int next_index;
-    while(index < total_branches && index > 0)
-    {
-        //prev_index = index
-        //int level = floor(log(index*(f-1) + 1) / log(flat_count)) + 1;
-        int temp_no;
-        if(f > 1)
-        {
-            temp_no = (pow(f,level-1) - 1) / (f-1);
-        }
-        else
-        {
-            temp_no = level - 1;
-        }
-        if(!rendered[index])
-        {
-            glPushMatrix();
-                glTranslated(branches[index].end_points.first[0], branches[index].end_points.first[1], branches[index].end_points.first[2]);
-                glRotated(branches[index].bent_angle[0] * (180.0/M_PI), 1, 0, 0);
-                glRotated(branches[index].bent_angle[2] * (180.0/M_PI), 0, 0, 1);
-                glTranslated(-branches[index].end_points.first[0], -branches[index].end_points.first[1], -branches[index].end_points.first[2]);
-                branches[index].paint();
-            rendered[index] = true;
+	// Iterative DFS - Stack Algorithm
+	// Make tree was done using BFS
+	
+	int push = 0;
+	std::stack<int> dfs;
+	dfs.push(0);	// stem
+	while(!dfs.empty())
+	{
+		int index = dfs.top();
 
-            if(f > 1)
-            {
-                next_index = ((pow(f,level)-1) / (f-1)) + f*((index - temp_no));
-                if(next_index >= total_branches)
-                {
-                    if(((index - temp_no + 1) % f > 0) || index-prev_index > 1)
-                    {
-                        prev_index = index;
-                        index++;
-                        glPopMatrix();
-                        continue;
-                    }
-                    else
-                    {
-                        int prev_level_at = ceil((index - temp_no + 1) / f);
-                        prev_index = index;
-                        index = ( (pow(f,level-2)-1)/(f-1) ) + prev_level_at - 1;
-                        level--;
-                        glPopMatrix();
-                        continue;
-                    }
-                }
-                else
-                {
-                    prev_index = index;
-                    index = next_index;
-                    level++;
-                    continue;
-                }
-            }
-            else
-            {
-                index++;
-                prev_index = index - 1;
-                level++;
-                continue;
-            }
-        }
-        else
-        {
+		push++;
+		glPushMatrix();
+		branches[index].paint();
+		
+		#ifdef VERBOSE
+			std::cout << "[FUNOP] Painting : " << index << "\t";
+			/*float matrix[16];
+			glGetFloatv(GL_MODELVIEW_MATRIX, matrix);
+			for(int i = 0; i < 16; i++)
+				std::cout << matrix[i] << "\t";
+			std::cout << std::endl;*/
+		#endif
 
-            if(((index - temp_no + 1) % f > 0) && prev_index-index > 1)
-            {
-                prev_index = index;
-                index++;
-                glPopMatrix();
-                continue;
-            }
-            else
-            {
-                int prev_level_at = ceil((index - temp_no + 1) / f);
-                prev_index = index;
-                index = ( (pow(f,level-2)-1)/(f-1) ) + prev_level_at - 1;
-                level--;
-                glPopMatrix();
-                continue;
-            }
-        }
+		dfs.pop();
+		int offset = index * flat_count;
+		if(offset < total_branches - 1)
+			for(int k = flat_count; k > 0; k--)
+			{
+				dfs.push(offset + k);
+			}
+		else
+		{
+			push--;
+			glPopMatrix();
+		}
 
-    }
+		if(!dfs.empty())
+			if(dfs.top() < index)
+			{
+				push--;
+				glPopMatrix();
+			}
+	}
 
-    glPopMatrix();
-
+	// Stack DFS ends without Popping all Matrices
+	for(int i=0; i<push; i++)
+	{
+		glPopMatrix();
+	}
+		
+	#ifdef VERBOSE
+		std::cout << "[OUTFN] Paint Tree" << std::endl;
+	#endif
 }
 

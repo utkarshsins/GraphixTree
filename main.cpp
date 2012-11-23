@@ -31,7 +31,7 @@ int maxfpstime = 1000/MAXFPS; // 1000 msec / fps
 using namespace std;
 
 double eye_radius = 8;
-triplet eye = {0,0,eye_radius};
+triplet eye = {0,-eye_radius,0};
 double upangle = 0;
 double sideangle = 0;
 double upangle_inc = 10*M_PI/180;
@@ -43,7 +43,7 @@ const GLfloat light_diffuse[]  = { 1.0f, 1.0f, 1.0f, 1.0f };
 const GLfloat light_specular[] = { 1.0f, 1.0f, 1.0f, 1.0f };
 const GLfloat light_position[] = { 2.0f, 5.0f, 5.0f, 0.0f };
 
-TreeSkeleton tree(3,2);
+TreeSkeleton tree(3,4);
 Wind wind(2,5,2.5);
 
 int TreeWindow, DirectionWindow;
@@ -76,6 +76,7 @@ static void redisplay(int value)
 
 static void display(void)
 { 
+	
 	#ifdef PROFILING
 	long long diff = TIME_CURRENT_MILLIS;
 	cout << "[TIME] [DRAW] : " << diff - now << endl;
@@ -83,7 +84,7 @@ static void display(void)
 	#endif
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glLoadIdentity();
-    gluLookAt(eye[0],eye[1],eye[2],0,0,0,0,1,0);
+    gluLookAt(eye[0],eye[1],eye[2],0,0,0,0,0,1);
 
     //global_time += 1;
     glPushMatrix();
@@ -102,7 +103,7 @@ static void display(void)
 	cout << "[TIME] [POSTSWAP] : " << diff - now << endl;
 	now = TIME_CURRENT_MILLIS;
 	#endif
-
+	
 	// Next Frame
 	tree.nextFrame(global_time++, wind);
 
@@ -155,7 +156,7 @@ static void displaydir(void)
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
-    gluLookAt(eye[0]/2,eye[1]/2,eye[2]/2,0,0,0,0,1,0);
+    gluLookAt(eye[0]/2,eye[1]/2,eye[2]/2,0,0,0,0,0,1);
 
     glPushMatrix();
         glEnable(GL_COLOR_MATERIAL);
@@ -208,8 +209,8 @@ static void specialKey(int key, int x, int y)
         double eye_height = eye_radius*sin(upangle);
         double smaller_radius = sqrt(eye_radius*eye_radius - eye_height*eye_height);
         eye[0] = smaller_radius*sin(sideangle);
-        eye[1] = eye_height;
-        eye[2] = smaller_radius*cos(sideangle);
+        eye[1] = -smaller_radius*cos(sideangle);
+        eye[2] = eye_height;
     }
 
     glutSetWindow(TreeWindow);

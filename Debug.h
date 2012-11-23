@@ -2,7 +2,7 @@
 #define DEBUG_H
 
 //#define VERBOSE
-//#define VERBOSE2
+#define VERBOSE2
 
 #define FPSLIMIT
 #define MAXFPS 45

@@ -11,8 +11,9 @@ const GLfloat Branch::high_shininess[] =
 
 Branch::Branch()
 {
-    end_points = make_pair(vec3(0,0,0), vec3(0,0,0));
     bent_angle.set(0,0,0);
+	init_angle.set(0,0,0);
+	current_angle.set(0,0,0);
     max_bent_angle.set(MAX_BENT_X, MAX_BENT_Y, MAX_BENT_Z);
     startthickness = .2;
     endthickness = .2;
@@ -22,28 +23,15 @@ Branch::Branch()
 
 }
 
-Branch :: Branch(vec3 start, vec3 end, int depth)
+Branch :: Branch(vec3 init, double len, int depth, double startt, double endt)
 {
-    end_points = make_pair(start, end);
     bent_angle.set(0,0,0);
-    max_bent_angle.set(MAX_BENT_X, MAX_BENT_Y, MAX_BENT_Z);
-    startthickness = .2;
-    endthickness = .2;
-    elastic_modulus = E_MODULUS;
-    length = dist(start, end);
-
-    addleaves(depth*MAX_LEAVES);
-
-}
-
-Branch :: Branch(vec3 start, vec3 end, double startt, double endt, int depth)
-{
-    end_points = make_pair(start, end);
-    bent_angle.set(0,0,0);
+	init_angle.copy(init);
+	current_angle.copy(init);
     max_bent_angle.set(MAX_BENT_X, MAX_BENT_Y, MAX_BENT_Z);
     startthickness = startt;
     endthickness = endt;
-    length = dist(start, end);
+    length = len;
     elastic_modulus = E_MODULUS;
     addleaves(depth*MAX_LEAVES);
 
@@ -51,7 +39,8 @@ Branch :: Branch(vec3 start, vec3 end, double startt, double endt, int depth)
 
 void Branch :: copy(Branch b)
 {
-    end_points = make_pair(b.end_points.first, b.end_points.second);
+	init_angle.copy(b.init_angle);
+	current_angle.copy(b.current_angle);
     bent_angle.copy(b.bent_angle);
     max_bent_angle.copy(b.max_bent_angle);
     startthickness = b.startthickness;
@@ -61,26 +50,17 @@ void Branch :: copy(Branch b)
 
 }
 
-void Branch :: set(vec3 start, vec3 end, double startt, double endt, int depth, Branch *branch)
+void Branch :: set(vec3 init, double len, int depth, double startt, double endt)
 {
-	#ifdef VERBOSE
-		std::cout << "[VECOP] Start : " ;
-		start.printvec();
-		std::cout << std::endl;
-		std::cout << "[VECOP] End : ";
-		end.printvec();
-		std::cout << std::endl;
-	#endif
-
-    end_points = make_pair(start, end);
     bent_angle.set(0,0,0);
+	init_angle.copy(init);
+	current_angle.copy(init);
     max_bent_angle.set(MAX_BENT_X, MAX_BENT_Y, MAX_BENT_Z);
     startthickness = startt;
     endthickness = endt;
-    length = dist(start, end);
-    addleaves(depth*MAX_LEAVES);
+    length = len;
     elastic_modulus = E_MODULUS;
-
+    addleaves(depth*MAX_LEAVES);
 }
 
 void Branch :: addleaves(int leavesmax)
@@ -97,10 +77,10 @@ void Branch :: addleaves(int leavesmax)
 void Branch :: wind_listener(Wind wind, double program_time)
 {
     srand(time(NULL));
-    double xload = wind.force_at(program_time, 0, end_points.first[0]);// * (1 + (rand()*1.0 / RAND_MAX));
-    double zload = wind.force_at(program_time, 2, end_points.first[2]);// * (1 + (rand()*1.0 / RAND_MAX));
+	double xload = wind.force_at(program_time, 0, 0);// * (1 + (rand()*1.0 / RAND_MAX));
+    double zload = wind.force_at(program_time, 2, 0);// * (1 + (rand()*1.0 / RAND_MAX));
     double spring_constant = (elastic_modulus * endthickness * (startthickness-endthickness)) / (4*pow(length,3));
-	//spring_constant = 5.0*(sin(spring_constant) + cos(spring_constant));
+	
     if(spring_constant == 0)
     {
         spring_constant = .01;
@@ -147,45 +127,37 @@ void Branch :: wind_listener(Wind wind, double program_time)
 
 void Branch :: paint()
 {
-    double xn = end_points.second[0]-end_points.first[0], yn = end_points.second[1]-end_points.first[1], zn = end_points.second[2]-end_points.first[2];
-    double angle = acos(yn/sqrt(xn*xn+yn*yn+zn*zn)) * 180/M_PI;
+	glRotated(current_angle[2], 0, 0, 1);
+	glRotated(current_angle[1], 0, 1, 0);
 
-    glPushMatrix();
-        glTranslated(end_points.first[0], end_points.first[1], end_points.first[2]);
-        glRotated(-angle, (-length*zn), 0, length*xn);
-        glRotated(-90, 1, 0, 0);
+    Leaf::setMaterial();
 
-        Leaf::setMaterial();
+	if(RENDER_LEAVES)
+		for(int i=0; i<leaves.size(); i++)
+		{
+			leaves[i].paint();
+		}
 
-		if(RENDER_LEAVES)
-			for(int i=0; i<leaves.size(); i++)
-			{
-				leaves[i].paint();
-			}
-
-        glMaterialfv(GL_FRONT, GL_AMBIENT,   mat_ambient);
-        glMaterialfv(GL_FRONT, GL_DIFFUSE,   mat_diffuse);
-        glMaterialfv(GL_FRONT, GL_SPECULAR,  mat_specular);
-        glMaterialfv(GL_FRONT, GL_SHININESS, high_shininess);
+    glMaterialfv(GL_FRONT, GL_AMBIENT,   mat_ambient);
+    glMaterialfv(GL_FRONT, GL_DIFFUSE,   mat_diffuse);
+    glMaterialfv(GL_FRONT, GL_SPECULAR,  mat_specular);
+    glMaterialfv(GL_FRONT, GL_SHININESS, high_shininess);
 
 
-        glPushMatrix();
+	if(RENDER_BRANCH)
+	{
+		glBegin(GL_POLYGON);
+			GLUquadricObj* cylinder = gluNewQuadric();
+			gluCylinder(cylinder, startthickness/2, endthickness/2, length, 8 , 10);
+		glEnd();
 
-			if(RENDER_BRANCH)
-			{
-				glBegin(GL_POLYGON);
-					GLUquadricObj* cylinder = gluNewQuadric();
-					gluCylinder(cylinder, startthickness/2, endthickness/2, length, 8 , 10);
-				glEnd();
-
-				glTranslated(0, 0, length);
-				glBegin(GL_POLYGON);
-					GLUquadricObj* disc = gluNewQuadric();
-					gluDisk(disc, 0, endthickness/2, 8, 10);
-				glEnd();
-			}
-
-        glPopMatrix();
-    glPopMatrix();
-
+		glTranslated(0, 0, length);
+		/*glBegin(GL_POLYGON);
+			GLUquadricObj* disc = gluNewQuadric();
+			gluDisk(disc, 0, endthickness/2, 8, 10);
+		glEnd();*/
+	}
+			
+	glRotated(-current_angle[1], 0, 1, 0);
+	glRotated(-current_angle[2], 0, 0, 1);
 }

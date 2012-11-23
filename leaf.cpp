@@ -38,7 +38,7 @@ void Leaf::set(double length)
     thetabranch = random(30,90);
     thetabranch360 = random(0,360);
     theta360 = random(0,360);
-		#ifdef VERBOSE
+		#ifdef VERBOSE_LEAF
 		std::cout << "[LEAFL] " << length_fraction << std::endl;
 		#endif
 }
