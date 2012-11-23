@@ -38,13 +38,14 @@ void Leaf::set(double length, bool value)
     length_fraction = random(0,length);
     thetabranch = random(30,90);
     thetabranch360 = random(0,360);
+    if(RENDER_LEAVES)
 	onefbeta = BetaNoise::librarynoise(ONEFBETA_2POW, ONEFBETA_BETA);
-	
+
 	#ifdef DEBUG_LEAF_BETA
 	if(value)
 	{
 		int num = onefbeta.size();
-		for(int i=0; i<num; i++) 
+		for(int i=0; i<num; i++)
 			std::cout << onefbeta[i] << std::endl;
 			std::cout	<< "======================================================================================="
 						<< std::endl;

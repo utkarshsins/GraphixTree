@@ -84,7 +84,7 @@ void TreeSkeleton :: makeTree()
 					double anglez = M_PI/4.0;
 					double angley = 2.0*M_PI*(double) k/(double) flat_count + angley_random;
 					double base_length = branch_length*cos(anglez);
-					
+
 					#ifdef VERBOSE
                         std::cout << "end points : ";
                         ref_end.printvec();
@@ -160,7 +160,7 @@ void TreeSkeleton :: paint(long long now)
     int index = 0, level = 1;
     int prev_index = -1;
 
-	double val = fmod((long double) now / 1000.0, ONEFBETA_SCALE) / ONEFBETA_SCALE;
+	double val = std::fmod((long double) now / 1000.0, (long double)ONEFBETA_SCALE) / ONEFBETA_SCALE;
 	#ifdef DEBUG_SINGLE_LEAF
 	std::cout << "VAL : " << val << "\t\t\tTIME : " << (now / 1000) % 1000 << "\t\t\t";
 	#endif

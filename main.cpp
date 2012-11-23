@@ -36,7 +36,7 @@ using namespace std;
 double eye_radius = 5;
 double upangle = 10*M_PI/180;
 double sideangle = 0;
-triplet eye = 
+triplet eye =
 	{
 		sqrt(eye_radius*eye_radius - eye_radius*sin(upangle)*eye_radius*sin(upangle))*sin(sideangle),
 		eye_radius*sin(upangle),
@@ -98,7 +98,7 @@ static void rotateview()
 #endif
 
 static void display(void)
-{ 
+{
 	#ifdef ROTATE
 	rotateview();
 	#endif
@@ -117,7 +117,7 @@ static void display(void)
 	long long timenow = TIME_CURRENT_MILLIS;
 	tree.paint(timenow);
     glPopMatrix();
-	
+
 	#ifdef PROFILING
 	diff = TIME_CURRENT_MILLIS;
 	cout << "[TIME] [PRESWAP] : " << diff - now << endl;
@@ -138,13 +138,13 @@ static void display(void)
 		long long fpsnow = TIME_CURRENT_MILLIS;
 		if((unsigned int) (fpsnow - fpstime) > maxfpstime)
 			glutPostRedisplay();
-		else 
+		else
 			glutTimerFunc((unsigned int) (maxfpstime - (fpsnow - fpstime)), redisplay,0);
 		fpstime = fpsnow;
 	#else
 		glutPostRedisplay();
 	#endif
-	
+
 	#ifdef PROFILING
 	diff = TIME_CURRENT_MILLIS;
 	cout << "[TIME] [POSTREDISPLAY] : " << diff - now << endl << endl;
@@ -280,7 +280,7 @@ int main(int argc, char *argv[])
 	glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH | GLUT_MULTISAMPLE);
 
     TreeWindow = glutCreateWindow("Tree Animation");
-	
+
 	glEnable( GL_LINE_SMOOTH );
     glEnable( GL_POLYGON_SMOOTH );
     glHint( GL_LINE_SMOOTH_HINT, GL_NICEST );

@@ -27,7 +27,7 @@ double *f_alpha ( int n, double q_d, double alpha, int *seed )
 //
 //  Licensing:
 //
-//    This code is distributed under the GNU LGPL license. 
+//    This code is distributed under the GNU LGPL license.
 //
 //  Modified:
 //
@@ -84,7 +84,7 @@ double *f_alpha ( int n, double q_d, double alpha, int *seed )
   hfa[0] = 1.0;
   for ( i = 1; i < n; i++ )
   {
-    hfa[i] = hfa[i-1] 
+    hfa[i] = hfa[i-1]
       * ( 0.5 * alpha + ( double ) ( i - 1 ) ) / ( ( double ) ( i ) );
   }
   for ( i = n; i < 2 * n; i++ )
@@ -176,7 +176,7 @@ double r8_normal_01 ( int *seed )
 //
 //  Discussion:
 //
-//    The standard normal probability distribution function (PDF) has 
+//    The standard normal probability distribution function (PDF) has
 //    mean 0 and standard deviation 1.
 //
 //    Because this routine uses the Box Muller method, it requires pairs
@@ -189,7 +189,7 @@ double r8_normal_01 ( int *seed )
 //
 //  Licensing:
 //
-//    This code is distributed under the GNU LGPL license. 
+//    This code is distributed under the GNU LGPL license.
 //
 //  Modified:
 //
@@ -285,7 +285,7 @@ string r8_to_string ( double r8, string format )
 //
 //  Licensing:
 //
-//    This code is distributed under the GNU LGPL license. 
+//    This code is distributed under the GNU LGPL license.
 //
 //  Modified:
 //
@@ -307,7 +307,7 @@ string r8_to_string ( double r8, string format )
   char r8_char[80];
   string r8_string;
 
-  sprintf ( r8_char, format.c_str ( ), r8 );
+  //sprintf ( r8_char, format.c_str ( ), r8 );
 
   r8_string = string ( r8_char );
 
@@ -345,7 +345,7 @@ double r8_uniform_01 ( int *seed )
 //
 //  Licensing:
 //
-//    This code is distributed under the GNU LGPL license. 
+//    This code is distributed under the GNU LGPL license.
 //
 //  Modified:
 //
@@ -389,7 +389,7 @@ double r8_uniform_01 ( int *seed )
 //    Input/output, int *SEED, the "seed" value.  Normally, this
 //    value should not be 0.  On output, SEED has been updated.
 //
-//    Output, double R8_UNIFORM_01, a new pseudorandom variate, 
+//    Output, double R8_UNIFORM_01, a new pseudorandom variate,
 //    strictly between 0 and 1.
 //
 {
@@ -437,7 +437,7 @@ void r8vec_print ( int n, double a[], string title )
 //
 //  Licensing:
 //
-//    This code is distributed under the GNU LGPL license. 
+//    This code is distributed under the GNU LGPL license.
 //
 //  Modified:
 //
@@ -461,7 +461,7 @@ void r8vec_print ( int n, double a[], string title )
   cout << "\n";
   cout << "TITLE" << "\n";
   cout << "\n";
-  for ( i = 0; i < n; i++ ) 
+  for ( i = 0; i < n; i++ )
   {
     cout << "  " << setw(8)  << i
          << ": " << setw(14) << a[i]  << "\n";
@@ -637,7 +637,7 @@ void r8vec_sftf ( int n, double r[], double *azero, double a[], double b[] )
 //  Discussion:
 //
 //    SFTF and SFTB are inverses of each other.  If we begin with data
-//    R and apply SFTB to it, and then apply SFTB to the resulting AZERO, 
+//    R and apply SFTB to it, and then apply SFTB to the resulting AZERO,
 //    A, and B, we should get back the original R.
 //
 //  Licensing:
@@ -714,7 +714,7 @@ void timestamp ( )
 //
 //  Licensing:
 //
-//    This code is distributed under the GNU LGPL license. 
+//    This code is distributed under the GNU LGPL license.
 //
 //  Modified:
 //

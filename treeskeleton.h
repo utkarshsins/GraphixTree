@@ -3,6 +3,7 @@
 
 #include "branch.h"
 #include "betanoise.h"
+#include <cmath>
 
 class TreeSkeleton
 {
