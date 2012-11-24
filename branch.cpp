@@ -12,6 +12,7 @@ const GLfloat Branch::high_shininess[] =
 Branch::Branch()
 {
     end_points = make_pair(vec3(0,0,0), vec3(0,0,0));
+    current_angle.set(0,0,0);
     bent_angle.set(0,0,0);
     max_bent_angle.set(MAX_BENT_X, MAX_BENT_Y, MAX_BENT_Z);
     startthickness = .2;
@@ -25,6 +26,7 @@ Branch::Branch()
 Branch :: Branch(vec3 start, vec3 end, int depth)
 {
     end_points = make_pair(start, end);
+    current_angle.set(0,0,0);
     bent_angle.set(0,0,0);
     max_bent_angle.set(MAX_BENT_X, MAX_BENT_Y, MAX_BENT_Z);
     startthickness = .2;
@@ -39,6 +41,7 @@ Branch :: Branch(vec3 start, vec3 end, int depth)
 Branch :: Branch(vec3 start, vec3 end, double startt, double endt, int depth)
 {
     end_points = make_pair(start, end);
+    current_angle.set(0,0,0);
     bent_angle.set(0,0,0);
     max_bent_angle.set(MAX_BENT_X, MAX_BENT_Y, MAX_BENT_Z);
     startthickness = startt;
@@ -52,6 +55,7 @@ Branch :: Branch(vec3 start, vec3 end, double startt, double endt, int depth)
 void Branch :: copy(Branch b)
 {
     end_points = make_pair(b.end_points.first, b.end_points.second);
+    current_angle.copy(b.current_angle);
     bent_angle.copy(b.bent_angle);
     max_bent_angle.copy(b.max_bent_angle);
     startthickness = b.startthickness;
@@ -77,6 +81,7 @@ void Branch :: set(vec3 start, vec3 end, double startt, double endt, int depth, 
 	#endif
 
     end_points = make_pair(start, end);
+    current_angle.set(0,0,0);
     bent_angle.set(0,0,0);
     max_bent_angle.set(MAX_BENT_X, MAX_BENT_Y, MAX_BENT_Z);
     startthickness = startt;

@@ -12,9 +12,10 @@
 #define MAXFPS 45
 
 #define MAX_LEAVES 20
+#define BRANCH_ROTATION_PER_FRAME M_PI/(3*180.0)
 
 #define RENDER_BRANCH true
-#define RENDER_LEAVES false
+#define RENDER_LEAVES true
 
 #include <chrono>
 #define TIME_CURRENT_MILLIS (std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch())).count();

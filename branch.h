@@ -34,6 +34,7 @@ class Branch
         pair<vec3, vec3> end_points;
         //pair<vec3, vec3> new_end_points;
         vec3 bent_angle;
+        vec3 current_angle;
         //vec3 total_bent_angle;
         vec3 max_bent_angle;
         double maxLoad;
@@ -58,7 +59,7 @@ class Branch
         void set(vec3 , vec3 , double, double , int , bool , Branch* );
 		#else
 		void set(vec3 , vec3 , double, double , int , Branch* );
-		#endif	
+		#endif
 
         void copy(Branch );
         void wind_listener(Wind , double );

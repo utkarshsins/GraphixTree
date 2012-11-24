@@ -151,7 +151,15 @@ void TreeSkeleton :: nextFrame(double time, Wind wind)
 		#ifdef VERBOSE2
 			std::cout << "BRANCH [" << i << "]" << std::endl;
 		#endif
-        branches[i].wind_listener(wind, time);
+		/*
+		if(branches[i].wind_changing)
+		{
+		    branches.wind_listener(wind, time);
+		}
+		*/
+	    branches[i].wind_listener(wind, time);
+    	branches[i].current_angle.increase(branches[i].bent_angle, vec3(BRANCH_ROTATION_PER_FRAME, BRANCH_ROTATION_PER_FRAME, BRANCH_ROTATION_PER_FRAME));
+
     }
 }
 
@@ -172,8 +180,8 @@ void TreeSkeleton :: paint(long long now)
 
     glPushMatrix();
         glTranslated(branches[0].end_points.first[0], branches[0].end_points.first[1], branches[0].end_points.first[2]);
-        glRotated(branches[0].bent_angle[0] * (180.0/M_PI), 1, 0, 0);
-        glRotated(branches[0].bent_angle[2] * (180.0/M_PI), 0, 0, 1);
+        //glRotated(branches[0].current_angle[0] * (180.0/M_PI), 1, 0, 0);
+        //glRotated(branches[0].current_angle[2] * (180.0/M_PI), 0, 0, 1);
         glTranslated(-branches[0].end_points.first[0], -branches[0].end_points.first[1], -branches[0].end_points.first[2]);
 		#ifdef DEBUG_SINGLE_LEAF
 		branches[0].paint(val, false);
@@ -203,8 +211,8 @@ void TreeSkeleton :: paint(long long now)
         {
             glPushMatrix();
                 glTranslated(branches[index].end_points.first[0], branches[index].end_points.first[1], branches[index].end_points.first[2]);
-                glRotated(branches[index].bent_angle[0] * (180.0/M_PI), 1, 0, 0);
-                glRotated(branches[index].bent_angle[2] * (180.0/M_PI), 0, 0, 1);
+                glRotated(branches[index].current_angle[0] * (180.0/M_PI), 1, 0, 0);
+                glRotated(branches[index].current_angle[2] * (180.0/M_PI), 0, 0, 1);
                 glTranslated(-branches[index].end_points.first[0], -branches[index].end_points.first[1], -branches[index].end_points.first[2]);
 				#ifdef DEBUG_SINGLE_LEAF
 				branches[index].paint(val,index==1);
