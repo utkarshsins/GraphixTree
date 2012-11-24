@@ -119,14 +119,14 @@ void Branch :: wind_listener(Wind wind, double program_time)
     double dz = zload/spring_constant;
     if(abs(dx) >= length)
     {
-        dx = 0;
+        dx = (dx / abs(dx)) * length;
 		#ifdef VERBOSE2
 			cout << "[ERROR] |dx| > length" << endl;
 		#endif
     }
     if(abs(dz) >= length)
     {
-        dz = 0;
+        dz = (dz / abs(dz)) * length;
 		#ifdef VERBOSE2
 			cout << "[ERROR] |dz| > length" << endl;
 		#endif

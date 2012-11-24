@@ -1,8 +1,8 @@
+#include <iostream>
 #include "betanoise.h"
 #include "Debug.h"
 #include "colornoise.h"
 #include <algorithm>
-#include <iostream>
 
 #define M_PI 3.141592654
 
@@ -19,11 +19,11 @@ void swap(struct Complex * coeff1, struct Complex * coeff2)
 }
 
 
-// Gaussian Random Function :	
+// Gaussian Random Function :
 // Knuth Algorithm
 //		Mean				= 0
 //		Standard Deviation	= 1
-double BetaNoise::gauss()		
+double BetaNoise::gauss()
 {
 	static double V1, V2, S;
 	static int phase = 0;
@@ -66,7 +66,7 @@ void BetaNoise::fastfourierinverse(int exp2, std::vector<struct Complex> coeffs)
 		for(;m>=2 && j>m;j-=m, m/=2);
 		j+=m;
 	}
-		
+
 	// Danielson Lanzcos
 	// Reference:
 	//	(1)
@@ -74,11 +74,11 @@ void BetaNoise::fastfourierinverse(int exp2, std::vector<struct Complex> coeffs)
 	//		http://paulbourke.net
 	//	(2)
 	//		http://www.codeproject.com/Articles/9388/How-to-implement-the-FFT-algorithm
-	
+
 	double c1 = -1.0;
 	double c2 = 0.0;
 	int l2 = 1;
-	for (int l=0;l<lognum;l++) 
+	for (int l=0;l<lognum;l++)
 	{
       int l1 = l2;
       l2 <<= 1;
@@ -107,7 +107,7 @@ std::vector<Complex> BetaNoise::noise(int exp2, double beta)
 {
 	int num = (int) pow(2.0,exp2);
 	std::vector<Complex> noisearr(num,Complex());
-	
+
 	// Frequency Domain Coefficients using Gaussian Random Numbers
 	for(int i=1; i<=num/2; i++)
 	{
@@ -123,7 +123,7 @@ std::vector<Complex> BetaNoise::noise(int exp2, double beta)
 		noisearr[num-i]=coeffrev;
 	}
 	noisearr[num/2].imaginary = 0;
-	
+
 	// Inverse Fourier Transform using Fast Fourier
 	fastfourierinverse(exp2, noisearr);
 
@@ -137,7 +137,7 @@ double randomnoise(double min, double max)
 
 static bool abs_compare(double a, double b)
 {
-    return (std::fabs(a) < std::fabs(b));
+    return (fabs(a) < fabs(b));
 }
 
 std::vector<double> BetaNoise::librarynoise(int exp2, double beta)
@@ -156,7 +156,7 @@ std::vector<double> BetaNoise::librarynoise(int exp2, double beta)
 	onefbeta[0] = 0;		// Hack to establish continuity between time-periods
 	onefbeta[num-1] = 0;	// Hack to establish continuity between time-periods
 
-	double result = std::fabs(* std::max_element(onefbeta.begin(), onefbeta.end(), abs_compare));
+	double result = fabs(* std::max_element(onefbeta.begin(), onefbeta.end(), abs_compare));
 	if(result!=0)
 		for(int i = 0; i<num; i++)
 		{
@@ -172,7 +172,7 @@ std::vector<double> BetaNoise::librarynoise(int exp2, double beta)
 			num = i+2;
 			break;
 		}
-		
+
 	return onefbeta;
 }
 
