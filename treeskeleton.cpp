@@ -176,7 +176,7 @@ void TreeSkeleton :: paint(long long now)
     {
         rendered[i] = false;
     }
-
+	glRotated(-90,0,1,0);
     glPushMatrix();
         glTranslated(branches[0].end_points.first[0], branches[0].end_points.first[1], branches[0].end_points.first[2]);
         //glRotated(branches[0].current_angle[0] * (180.0/M_PI), 1, 0, 0);
