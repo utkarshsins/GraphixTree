@@ -14,6 +14,8 @@
 
 #define WIND_TIME_PERIOD 60.0
 
+#define WIND_PULSE_COUNT 6
+
 #define M_PI 3.143
 
 class Wind
