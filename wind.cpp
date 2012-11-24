@@ -7,6 +7,7 @@ Wind::Wind()
 	windz = std::vector<double>(60,0);
 	type = WIND_TYPE_CONSTANT;
 	change_type();
+	change_type();
 	for(int i =0; i<windx.size(); i++)
 		std::cout << windx[i] << std::endl;
 }
@@ -37,16 +38,17 @@ bool Wind :: change_type()
 		case WIND_TYPE_PULSE:
 			for(int i = 0; i<size; i++)
 			{
-				windx[i] = WIND_AMPLITUDE * ((i*2*WIND_PULSE_COUNT/(int) size)%2);
+				windx[i] = WIND_AMPLITUDE * ((i*2*(int) WIND_PULSE_COUNT/(int) size)%2);
 				windz[i] = 0;
 			}
 			break;
 		case WIND_TYPE_SINSQUARE:
 			for(int i=0; i<size; i++)
 			{
-				windx[i] = WIND_AMPLITUDE * std::sin(M_PI*((double) i)/size) * std::sin(M_PI*((double) i)/size);
+				windx[i] = WIND_AMPLITUDE * std::sin(M_PI*((double) i)*WIND_PULSE_COUNT/size) * std::sin(M_PI*((double) i)*WIND_PULSE_COUNT/size);
 				windz[i] = 0;
 			}
+			windx[size-1] = 0;
 			break;
 	}
 	return true;
