@@ -100,7 +100,6 @@ void Branch :: addleaves(int leavesmax, bool printbeta)
 
 void Branch :: wind_listener(Wind wind, long long program_time)
 {
-    srand(time(NULL));
     double xload = wind.force_at(0,program_time);// * (1 + (rand()*1.0 / RAND_MAX));
     double zload = wind.force_at(1,program_time);// * (1 + (rand()*1.0 / RAND_MAX));
     double spring_constant = (elastic_modulus * endthickness * (startthickness-endthickness)) / (4*pow(length,3));
@@ -127,7 +126,6 @@ void Branch :: wind_listener(Wind wind, long long program_time)
     }
     bent_angle[0] = asin(dx/length);
     bent_angle[2] = asin(dz/length);
-
 	#ifdef VERBOSE2
 		cout << "XLoad : " << xload << endl;
 		cout << "ZLoad : " << zload << endl;

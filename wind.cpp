@@ -1,9 +1,14 @@
 #include "wind.h"
+#include "Debug.h"
 
 Wind::Wind()
 {
 	windx = std::vector<double>(60,WIND_AMPLITUDE);
 	windz = std::vector<double>(60,0);
+	type = WIND_TYPE_CONSTANT;
+	change_type();
+	//for(int i =0; i<windx.size(); i++)
+	//	std::cout << windx[i] << std::endl;
 }
 
 double Wind :: force_at(int coord, long long now)
@@ -15,9 +20,10 @@ double Wind :: force_at(int coord, long long now)
 		return windz[std::floor(index)]*(1.0-std::fmod(index,1.0)) + windz[std::ceil(index)]*std::fmod(index,1.0);
 }
 
-bool Wind :: change_type(long long now)
+bool Wind :: change_type()
 {
 	type = (type + 1) % TOTAL_WIND_TYPES;
+	double size = windx.size();
 	switch(type)
 	{
 		case WIND_TYPE_CONSTANT:
@@ -28,14 +34,13 @@ bool Wind :: change_type(long long now)
 			}
 			break;
 		case WIND_TYPE_PULSE:
-			for(int i = 0; i<windx.size(); i++)
+			for(int i = 0; i<size; i++)
 			{
-				windx[i] = WIND_AMPLITUDE * (i%2);
+				windx[i] = WIND_AMPLITUDE * ((i*2/(int) size)%2);
 				windz[i] = 0;
 			}
 			break;
 		case WIND_TYPE_SINSQUARE:
-			double size = windx.size();
 			for(int i=0; i<size; i++)
 			{
 				windx[i] = WIND_AMPLITUDE * std::sin(M_PI*((double) i)/size) * std::sin(M_PI*((double) i)/size);
@@ -49,7 +54,7 @@ bool Wind :: change_type(long long now)
 bool Wind :: calculate_wind(long long now)
 {
 	double index = (windx.size()-1)*std::fmod((long double) now / 1000.0, (long double)WIND_TIME_PERIOD) / WIND_TIME_PERIOD;
-	if(windx[std::floor(index)] == windx[std::ceil(index)] && windz[std::floor(index)] == windx[std::ceil(index)])
+	if(windx[std::floor(index)] == windx[std::ceil(index)] && windz[std::floor(index)] == windz[std::ceil(index)])
 		return false;
 	return true;
 }

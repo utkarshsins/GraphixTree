@@ -25,7 +25,7 @@
 //#define DEBUG_SINGLE_LEAF
 //#define DEBUG_LEAF_BETA
 
-#define ONEFBETA_SCALE 120.000 // sec. between 2 iterations of noise
+#define ONEFBETA_SCALE 20.000 // sec. between 2 iterations of noise
 #define ONEFBETA_2POW 7
 #define ONEFBETA_BETA 2
 

@@ -132,8 +132,8 @@ static void display(void)
 	#endif
 
 	// Next Frame
-	if(wind.calculate_wind(now))
-		tree.wind_listener(now, wind);
+	//if(wind.calculate_wind(fpstime))
+		tree.wind_listener(fpstime, wind);
 
 	tree.nextFrame();
 

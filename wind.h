@@ -20,7 +20,7 @@ class Wind
 {
     public:
         Wind();
-		bool change_type(long long);
+		bool change_type();
         double force_at(int, long long);
 		int type;
 		std::vector<double> windx, windz;		
