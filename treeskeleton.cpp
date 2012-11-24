@@ -150,7 +150,19 @@ void TreeSkeleton :: nextFrame()
 		#ifdef VERBOSE2
 			std::cout << "BRANCH [" << i << "]" << std::endl;
 		#endif
-    	branches[i].current_angle.increase(branches[i].bent_angle, vec3(BRANCH_ROTATION_PER_FRAME, BRANCH_ROTATION_PER_FRAME, BRANCH_ROTATION_PER_FRAME));
+		//if(branches[i].bent_angle_changed)
+		//{
+        branches[i].current_angle.tend_to(branches[i].bent_angle, vec3(BRANCH_ROTATION_PER_FRAME, BRANCH_ROTATION_PER_FRAME, BRANCH_ROTATION_PER_FRAME), branches[i].bent_angle_changed);
+
+		//}
+		/*
+		else
+		{
+		    branches[i].current_angle.decrease(branches[i].bent_angle, vec3(BRANCH_ROTATION_PER_FRAME, BRANCH_ROTATION_PER_FRAME, BRANCH_ROTATION_PER_FRAME));
+
+		}
+		*/
+
     }
 }
 
