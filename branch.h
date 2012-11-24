@@ -17,6 +17,7 @@
 #include "data_structures.h"
 #include "leaf.h"
 #include "wind.h"
+#include "betanoise.h"
 #include <time.h>
 #include <cmath>
 
@@ -45,6 +46,9 @@ class Branch
         vector<Leaf> leaves;
         void addleaves(int,bool);
 
+		vector<double> betanoise;
+		int betasize;
+
         Branch();
         Branch(vec3 , vec3 , int );
         Branch(vec3 , vec3 , double, double , int );
@@ -61,8 +65,7 @@ class Branch
 		void set(vec3 , vec3 , double, double , int , Branch* );
 		#endif
 
-        void copy(Branch );
-        void wind_listener(Wind , double );
+        void wind_listener(Wind , long long);
 
         static const GLfloat mat_ambient[];
         static const GLfloat mat_diffuse[];

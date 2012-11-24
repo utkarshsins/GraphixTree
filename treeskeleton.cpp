@@ -131,7 +131,6 @@ void TreeSkeleton :: makeTree()
                             NULL
                         );
                 }
-                std::cout << std::endl;
             }
         }
         start_index += step_count;
@@ -144,23 +143,23 @@ void TreeSkeleton :: makeTree()
 
 }
 
-void TreeSkeleton :: nextFrame(double time, Wind wind)
+void TreeSkeleton :: nextFrame()
 {
     for(int i = 1; i < total_branches; i++)
     {
 		#ifdef VERBOSE2
 			std::cout << "BRANCH [" << i << "]" << std::endl;
 		#endif
-		/*
-		if(branches[i].wind_changing)
-		{
-		    branches.wind_listener(wind, time);
-		}
-		*/
-	    branches[i].wind_listener(wind, time);
     	branches[i].current_angle.increase(branches[i].bent_angle, vec3(BRANCH_ROTATION_PER_FRAME, BRANCH_ROTATION_PER_FRAME, BRANCH_ROTATION_PER_FRAME));
-
     }
+}
+
+void TreeSkeleton :: wind_listener(long long time, Wind wind)
+{
+	for(int i = 1; i<total_branches; i++)
+	{
+		branches[i].wind_listener(wind, time);
+	}
 }
 
 void TreeSkeleton :: paint(long long now)
@@ -211,8 +210,10 @@ void TreeSkeleton :: paint(long long now)
         {
             glPushMatrix();
                 glTranslated(branches[index].end_points.first[0], branches[index].end_points.first[1], branches[index].end_points.first[2]);
-                glRotated(branches[index].current_angle[0] * (180.0/M_PI), 1, 0, 0);
-                glRotated(branches[index].current_angle[2] * (180.0/M_PI), 0, 0, 1);
+				double valindex = val * ((double) (branches[index].betasize-1));
+				double linearinterpol = branches[index].betanoise[floor(valindex)] * (1.0 - fmod(valindex, 1.0)) + branches[index].betanoise[ceil(valindex)] * fmod(valindex, 1.0);
+				glRotated(branches[index].current_angle[0] * (180.0/M_PI) + BRANCH_BETA_ROTATION_LIMIT_X * linearinterpol, 1, 0, 0);
+                glRotated(branches[index].current_angle[2] * (180.0/M_PI) + BRANCH_BETA_ROTATION_LIMIT_Z * linearinterpol, 0, 0, 1);
                 glTranslated(-branches[index].end_points.first[0], -branches[index].end_points.first[1], -branches[index].end_points.first[2]);
 				#ifdef DEBUG_SINGLE_LEAF
 				branches[index].paint(val,index==1);

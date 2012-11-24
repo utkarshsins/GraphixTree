@@ -52,19 +52,6 @@ Branch :: Branch(vec3 start, vec3 end, double startt, double endt, int depth)
 
 }
 
-void Branch :: copy(Branch b)
-{
-    end_points = make_pair(b.end_points.first, b.end_points.second);
-    current_angle.copy(b.current_angle);
-    bent_angle.copy(b.bent_angle);
-    max_bent_angle.copy(b.max_bent_angle);
-    startthickness = b.startthickness;
-    endthickness = b.endthickness;
-    length = b.length;
-    elastic_modulus = b.elastic_modulus;
-
-}
-
 #ifdef DEBUG_LEAF_BETA
 void Branch :: set(vec3 start, vec3 end, double startt, double endt, int depth, bool printbeta, Branch *branch)
 #else
@@ -96,6 +83,8 @@ void Branch :: set(vec3 start, vec3 end, double startt, double endt, int depth, 
 
     elastic_modulus = E_MODULUS;
 
+	betanoise = BetaNoise::librarynoise(ONEFBETA_2POW, ONEFBETA_BETA);
+	betasize = betanoise.size();
 }
 
 void Branch :: addleaves(int leavesmax, bool printbeta)
@@ -109,11 +98,11 @@ void Branch :: addleaves(int leavesmax, bool printbeta)
     }
 }
 
-void Branch :: wind_listener(Wind wind, double program_time)
+void Branch :: wind_listener(Wind wind, long long program_time)
 {
     srand(time(NULL));
-    double xload = wind.force_at(program_time, 0, end_points.first[0]);// * (1 + (rand()*1.0 / RAND_MAX));
-    double zload = wind.force_at(program_time, 2, end_points.first[2]);// * (1 + (rand()*1.0 / RAND_MAX));
+    double xload = wind.force_at(0,program_time);// * (1 + (rand()*1.0 / RAND_MAX));
+    double zload = wind.force_at(1,program_time);// * (1 + (rand()*1.0 / RAND_MAX));
     double spring_constant = (elastic_modulus * endthickness * (startthickness-endthickness)) / (4*pow(length,3));
 	//spring_constant = 5.0*(sin(spring_constant) + cos(spring_constant));
     if(spring_constant == 0)
