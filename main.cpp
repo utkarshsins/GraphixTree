@@ -57,7 +57,7 @@ TreeSkeleton tree(4,4);
 Wind wind;
 
 int TreeWindow, DirectionWindow;
-
+const float direction_scale = 1.5;
 /* GLUT callback Handlers */
 
 static void resize(int width, int height)
@@ -81,6 +81,9 @@ static void resize(int width, int height)
 
 static void redisplay(int value)
 {
+	glutSetWindow(DirectionWindow);
+	glutPostRedisplay();
+	glutSetWindow(TreeWindow);
 	glutPostRedisplay();
 }
 
@@ -140,12 +143,12 @@ static void display(void)
 	#ifdef FPSLIMIT
 		long long fpsnow = TIME_CURRENT_MILLIS;
 		if((unsigned int) (fpsnow - fpstime) > maxfpstime)
-			glutPostRedisplay();
+			redisplay(0);
 		else
 			glutTimerFunc((unsigned int) (maxfpstime - (fpsnow - fpstime)), redisplay,0);
 		fpstime = fpsnow;
 	#else
-		glutPostRedisplay();
+		redisplay(0);
 	#endif
 
 	#ifdef PROFILING
@@ -182,11 +185,11 @@ static void displaydir(void)
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    glFrustum(-1, 1, -1.0, 1.0, 3.0, 10.0);
+    glFrustum(-direction_scale, direction_scale, -direction_scale, direction_scale, 3.0, 10.0);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
-    gluLookAt(eye[0]/2,eye[1]/2,eye[2]/2,0,0,0,0,1,0);
+    gluLookAt(eye[0],eye[1],eye[2],0,0,0,0,1,0);
 
     glPushMatrix();
         glEnable(GL_COLOR_MATERIAL);
@@ -317,10 +320,10 @@ int main(int argc, char *argv[])
     glutDisplayFunc(displaydir);
     glutKeyboardFunc(key);
     glutSpecialFunc(specialKey);
+	//glutIdleFunc(dirredisplay);
 
     glutSetWindow(TreeWindow);
 
-    srand((unsigned) time(NULL));
     tree.makeTree();
 
     glutMainLoop();
