@@ -128,8 +128,11 @@ void Branch :: wind_listener(Wind wind, long long program_time)
 			cout << "[ERROR] |dz| > length" << endl;
 		#endif
     }
-    double bent_angle0 = asin(dx/length);
-    double bent_angle2 = asin(dz/length);
+    double bent_angle0 = bent_angle[0];
+    double bent_angle2 = bent_angle[2];
+
+    bent_angle[0] = asin(dx/length);
+    bent_angle[2] = asin(dz/length);
 	#ifdef VERBOSE2
 		cout << "XLoad : " << xload << endl;
 		cout << "ZLoad : " << zload << endl;
@@ -143,17 +146,19 @@ void Branch :: wind_listener(Wind wind, long long program_time)
 	#endif
 
 
-    //for(int i = 0; i < 3; i++)
-    //{
-    if(fabs(bent_angle0) > max_bent_angle[0]*M_PI/180)
+    for(int i = 0; i < 3; i++)
     {
-        bent_angle0 = (bent_angle0/fabs(bent_angle0)) * max_bent_angle[0] * M_PI/180.0;
+        if(fabs(bent_angle[i]) > max_bent_angle[i]*M_PI/180)
+        {
+            bent_angle[i] = (bent_angle[i]/fabs(bent_angle[i])) * max_bent_angle[i] * M_PI/180.0;
+        }
     }
+    /*
     if(fabs(bent_angle2) > max_bent_angle[2]*M_PI/180)
     {
         bent_angle2 = (bent_angle2/fabs(bent_angle2)) * max_bent_angle[2] * M_PI/180.0;
     }
-
+    */
     if(bent_angle[0] == bent_angle0 && bent_angle[2] == bent_angle2)
     {
         bent_angle_changed = false;
@@ -161,8 +166,8 @@ void Branch :: wind_listener(Wind wind, long long program_time)
     else
     {
         bent_angle_changed = true;
-        bent_angle[0] = bent_angle0;
-        bent_angle[2] = bent_angle2;
+        //bent_angle[0] = bent_angle0;
+        //bent_angle[2] = bent_angle2;
     }
     //}
 }
