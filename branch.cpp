@@ -145,13 +145,13 @@ void Branch :: wind_listener(Wind wind, long long program_time)
 
     //for(int i = 0; i < 3; i++)
     //{
-    if(abs((long) bent_angle0) > max_bent_angle[0]*M_PI/180)
+    if(fabs(bent_angle0) > max_bent_angle[0]*M_PI/180)
     {
-        bent_angle0 = (bent_angle0/abs((long) bent_angle0)) * max_bent_angle[0] * M_PI/180.0;
+        bent_angle0 = (bent_angle0/fabs(bent_angle0)) * max_bent_angle[0] * M_PI/180.0;
     }
-    if(abs((long) bent_angle2) > max_bent_angle[2]*M_PI/180)
+    if(fabs(bent_angle2) > max_bent_angle[2]*M_PI/180)
     {
-        bent_angle2 = (bent_angle2/abs((long) bent_angle2)) * max_bent_angle[2] * M_PI/180.0;
+        bent_angle2 = (bent_angle2/fabs(bent_angle2)) * max_bent_angle[2] * M_PI/180.0;
     }
 
     if(bent_angle[0] == bent_angle0 && bent_angle[2] == bent_angle2)
