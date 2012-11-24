@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <cmath>
+#include <iostream>
 
 #define WIND_TYPE_CONSTANT 0
 #define WIND_TYPE_PULSE 1
@@ -19,9 +20,8 @@ class Wind
 {
     public:
         Wind();
-        Wind(double , double , double );
 		bool change_type(long long);
-        double force_at(double , int , double );
+        double force_at(int, long long);
 		int type;
 		std::vector<double> windx, windz;		
 		bool calculate_wind(long long);

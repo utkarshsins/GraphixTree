@@ -53,8 +53,8 @@ const GLfloat light_diffuse[]  = { 1.0f, 1.0f, 1.0f, 1.0f };
 const GLfloat light_specular[] = { 1.0f, 1.0f, 1.0f, 1.0f };
 const GLfloat light_position[] = { 2.0f, 5.0f, 5.0f, 0.0f };
 
-TreeSkeleton tree(6,2);
-Wind wind(2,5,2.5);
+TreeSkeleton tree(4,4);
+Wind wind;
 
 int TreeWindow, DirectionWindow;
 
@@ -132,7 +132,10 @@ static void display(void)
 	#endif
 
 	// Next Frame
-	tree.nextFrame(global_time++, wind);
+	if(wind.calculate_wind(now))
+		tree.wind_listener(now, wind);
+
+	tree.nextFrame();
 
 	#ifdef FPSLIMIT
 		long long fpsnow = TIME_CURRENT_MILLIS;

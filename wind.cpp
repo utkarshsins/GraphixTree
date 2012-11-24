@@ -6,13 +6,7 @@ Wind::Wind()
 	windz = std::vector<double>(60,0);
 }
 
-Wind::Wind(double wx, double wy, double wz)
-{
-	windx = std::vector<double>(60,WIND_AMPLITUDE);
-	windz = std::vector<double>(60,0);
-}
-
-double Wind :: force_at(double t, int coord, double now)
+double Wind :: force_at(int coord, long long now)
 {
 	double index = (windx.size()-1)*std::fmod((long double) now / 1000.0, (long double)WIND_TIME_PERIOD) / WIND_TIME_PERIOD;
 	if(coord == 0)
