@@ -19,6 +19,7 @@ Branch::Branch()
     endthickness = .2;
     length = .5;
     elastic_modulus = E_MODULUS;
+    bent_angle_changed = false;
     addleaves(0*MAX_LEAVES, false);
 
 }
@@ -32,6 +33,7 @@ Branch :: Branch(vec3 start, vec3 end, int depth)
     startthickness = .2;
     endthickness = .2;
     elastic_modulus = E_MODULUS;
+    bent_angle_changed = false;
     length = dist(start, end);
 
     addleaves(depth*MAX_LEAVES, false);
@@ -48,6 +50,7 @@ Branch :: Branch(vec3 start, vec3 end, double startt, double endt, int depth)
     endthickness = endt;
     length = dist(start, end);
     elastic_modulus = E_MODULUS;
+    bent_angle_changed = false;
     addleaves(depth*MAX_LEAVES, false);
 
 }
@@ -73,6 +76,7 @@ void Branch :: set(vec3 start, vec3 end, double startt, double endt, int depth, 
     max_bent_angle.set(MAX_BENT_X, MAX_BENT_Y, MAX_BENT_Z);
     startthickness = startt;
     endthickness = endt;
+    bent_angle_changed = false;
     length = dist(start, end);
 
 	#ifdef DEBUG_LEAF_BETA
@@ -124,8 +128,8 @@ void Branch :: wind_listener(Wind wind, long long program_time)
 			cout << "[ERROR] |dz| > length" << endl;
 		#endif
     }
-    bent_angle[0] = asin(dx/length);
-    bent_angle[2] = asin(dz/length);
+    double bent_angle0 = asin(dx/length);
+    double bent_angle2 = asin(dz/length);
 	#ifdef VERBOSE2
 		cout << "XLoad : " << xload << endl;
 		cout << "ZLoad : " << zload << endl;
@@ -138,13 +142,27 @@ void Branch :: wind_listener(Wind wind, long long program_time)
 		//cin >> n;
 	#endif
 
-    for(int i = 0; i < 3; i++)
+
+    //for(int i = 0; i < 3; i++)
+    //{
+    if(abs((long) bent_angle0) > max_bent_angle[0]*M_PI/180)
     {
-        if(abs((long) bent_angle[i]) > max_bent_angle[i]*M_PI/180)
-        {
-            bent_angle[i] = (bent_angle[i]/abs((long) bent_angle[i])) * max_bent_angle[i] * M_PI/180.0;
-        }
+        bent_angle0 = (bent_angle0/abs((long) bent_angle0)) * max_bent_angle[0] * M_PI/180.0;
     }
+    if(abs((long) bent_angle2) > max_bent_angle[2]*M_PI/180)
+    {
+        bent_angle2 = (bent_angle2/abs((long) bent_angle2)) * max_bent_angle[2] * M_PI/180.0;
+    }
+
+    if(bent_angle[0] == bent_angle0 && bent_angle[2] == bent_angle2)
+    {
+        bent_angle_changed = false;
+    }
+    else
+    {
+        bent_angle_changed = true;
+    }
+    //}
 }
 
 #ifdef DEBUG_SINGLE_LEAF

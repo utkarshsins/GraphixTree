@@ -76,7 +76,7 @@ void vec3 :: copy(vec3 a)
     values[2] = a.values[2];
 }
 
-void vec3 :: increase(vec3 limit, vec3 inc)
+void vec3 :: tend_to(vec3 limit, vec3 inc, bool cond)
 {
     for(int i = 0; i < 3; i++)
     {
@@ -84,10 +84,32 @@ void vec3 :: increase(vec3 limit, vec3 inc)
         {
             //if(values[i])
             values[i] += (limit[i] >= 0 ? inc[i] : -inc[i]);
+
         }
+        else if(cond && fabs(values[i]) > fabs(limit[i]))
+        {
+            values[i] -= (limit[i] >= 0 ? inc[i] : -inc[i]);
+
+        }
+
+
     }
 }
+/*
+void vec3 :: decrease(vec3 limit, vec3 dec)
+{
+    for(int i = 0; i < 3; i++)
+    {
+        if(fabs(values[i]) > fabs(limit[i]))
+        {
+            //if(values[i])
+            values[i] -= (limit[i] >= 0 ? dec[i] : -dec[i]);
+        }
 
+
+    }
+}
+*/
 void vec3 :: set(double a, double b, double c)
 {
     values[0] = a;

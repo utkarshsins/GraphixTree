@@ -35,6 +35,7 @@ class Branch
         pair<vec3, vec3> end_points;
         //pair<vec3, vec3> new_end_points;
         vec3 bent_angle;
+        bool bent_angle_changed;
         vec3 current_angle;
         //vec3 total_bent_angle;
         vec3 max_bent_angle;
