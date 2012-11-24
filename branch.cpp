@@ -161,6 +161,8 @@ void Branch :: wind_listener(Wind wind, long long program_time)
     else
     {
         bent_angle_changed = true;
+        bent_angle[0] = bent_angle0;
+        bent_angle[2] = bent_angle2;
     }
     //}
 }
