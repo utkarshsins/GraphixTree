@@ -17,7 +17,7 @@
 #define BRANCH_BETA_ROTATION_LIMIT_Z 5.0
 
 #define RENDER_BRANCH true
-#define RENDER_LEAVES false
+#define RENDER_LEAVES true
 
 #include <chrono>
 #define TIME_CURRENT_MILLIS (std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch())).count();
@@ -25,7 +25,7 @@
 //#define DEBUG_SINGLE_LEAF
 //#define DEBUG_LEAF_BETA
 
-#define ONEFBETA_SCALE 20.000 // sec. between 2 iterations of noise
+#define ONEFBETA_SCALE 120.000 // sec. between 2 iterations of noise
 #define ONEFBETA_2POW 7
 #define ONEFBETA_BETA 2
 

@@ -8,14 +8,14 @@ Wind::Wind()
 	type = WIND_TYPE_CONSTANT;
 	change_type();
 	change_type();
-	for(int i =0; i<windx.size(); i++)
-		std::cout << windx[i] << std::endl;
+	//for(int i =0; i<windx.size(); i++)
+	//	std::cout << windx[i] << std::endl;
 }
 
 double Wind :: force_at(int coord, long long now)
 {
 	double index = (windx.size()-1)*std::fmod((long double) now / 1000.0, (long double)WIND_TIME_PERIOD) / WIND_TIME_PERIOD;
-	std::cout << "INDEX : " << index << "\t\t\t\t" << windx[index] << std::endl;
+	//std::cout << "INDEX : " << index << "\t\t\t\t" << windx[index] << std::endl;
 	if(coord == 0)
 		return windx[std::floor(index)]*(1.0-std::fmod(index,1.0)) + windx[std::ceil(index)]*std::fmod(index,1.0);
 	else
