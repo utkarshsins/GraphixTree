@@ -364,12 +364,12 @@ int main(int argc, char *argv[])
     glutKeyboardFunc(key);
     glutSpecialFunc(specialKey);
 	//glutIdleFunc(dirredisplay);
-
+	/*
 	WindWindow = glutCreateSubWindow(TreeWindow, 0, glutGet(GLUT_WINDOW_HEIGHT)-200,150,150);
 	glutDisplayFunc(displaywind);
     glutKeyboardFunc(key);
     glutSpecialFunc(specialKey);
-
+	*/
     glutSetWindow(TreeWindow);
 
     tree.makeTree();
