@@ -49,6 +49,7 @@ class Branch
 
 		int betanoiseindex;
 		int betasize;
+		static bool enablebeta;
 
         Branch();
         Branch(vec3 , vec3 , int );

@@ -15,6 +15,8 @@ double randombranch(double min, double max)
     return min + ((double) rand() / RAND_MAX) * (max-min);
 }
 
+bool Branch::enablebeta = true;
+
 Branch::Branch()
 {
     end_points = make_pair(vec3(0,0,0), vec3(0,0,0));

@@ -312,7 +312,7 @@ static void specialKey(int key, int x, int y)
 
 static void key(unsigned char key, int x, int y)
 {
-	std::cout << "GOT KEY : " << key << std::endl;
+	//std::cout << "GOT KEY : " << key << std::endl;
     switch (key)
     {
 		#ifdef ROTATE
@@ -324,6 +324,9 @@ static void key(unsigned char key, int x, int y)
 			glutPostRedisplay();
 			break;
 		#endif
+		case 'b':
+			Branch::enablebeta = !Branch::enablebeta;
+			break;
 		case 27:
         case 'q':
             exit(0);
