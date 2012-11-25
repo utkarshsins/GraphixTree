@@ -39,7 +39,7 @@ void Leaf::set(double length, bool value)
     length_fraction = random(0,length);
     thetabranch = random(30,90);
     thetabranch360 = random(0,360);
-	onefbeta = BetaNoise::librarynoise(ONEFBETA_2POW, ONEFBETA_BETA);
+	onefbetaindex = random(0,9);
 
 	#ifdef DEBUG_LEAF_BETA
 	if(value)
@@ -60,8 +60,8 @@ void Leaf::paint(double val, bool show)
 void Leaf::paint(double val)
 #endif
 {
-	val = val * (onefbeta.size()-1);
-	double linearinterpol = onefbeta[floor(val)] * (1.0 - fmod(val, 1.0)) + onefbeta[ceil(val)] * fmod(val, 1.0);
+	val = val * (BetaNoise::noises[onefbetaindex].size()-1);
+	double linearinterpol = BetaNoise::noises[onefbetaindex][floor(val)] * (1.0 - fmod(val, 1.0)) + BetaNoise::noises[onefbetaindex][ceil(val)] * fmod(val, 1.0);
 	thetax = LEAF_ROTATION_LIMIT_X * linearinterpol;
 	thetay = LEAF_ROTATION_LIMIT_Y * linearinterpol;
 	thetaz = thetax * LEAF_ROTATION_X_Z_FACTOR + LEAF_ROTATION_LIMIT_Z * linearinterpol;

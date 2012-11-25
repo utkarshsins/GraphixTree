@@ -388,7 +388,8 @@ int main(int argc, char *argv[])
 	glutMouseFunc(changewind);
 
     glutSetWindow(TreeWindow);
-
+	
+	BetaNoise::generatenoises();
     tree.makeTree();
 
     glutMainLoop();

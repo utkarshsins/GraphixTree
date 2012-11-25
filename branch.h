@@ -47,7 +47,7 @@ class Branch
         vector<Leaf> leaves;
         void addleaves(int,bool);
 
-		vector<double> betanoise;
+		int betanoiseindex;
 		int betasize;
 
         Branch();

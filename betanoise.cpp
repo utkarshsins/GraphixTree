@@ -6,6 +6,7 @@
 
 #define M_PI 3.141592654
 
+std::vector<std::vector<double>> BetaNoise::noises;
 
 void swap(struct Complex * coeff1, struct Complex * coeff2)
 {
@@ -174,6 +175,14 @@ std::vector<double> BetaNoise::librarynoise(int exp2, double beta)
 		}
 
 	return onefbeta;
+}
+
+void BetaNoise::generatenoises()
+{
+	for(int i=0; i<10; i++)
+	{
+		noises.push_back(librarynoise(ONEFBETA_2POW, ONEFBETA_BETA));
+	}
 }
 
 //int main(int argc, char *argv[])

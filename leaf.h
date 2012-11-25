@@ -49,7 +49,8 @@ class Leaf
 
 		static bool render_leaves;
 
-		std::vector<double> onefbeta;
+		//std::vector<double> onefbeta;
+		int onefbetaindex;
 };
 #endif /* __LEAF_H__ */
 

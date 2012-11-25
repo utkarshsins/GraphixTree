@@ -223,7 +223,7 @@ void TreeSkeleton :: paint(long long now)
             glPushMatrix();
                 glTranslated(branches[index].end_points.first[0], branches[index].end_points.first[1], branches[index].end_points.first[2]);
 				double valindex = val * ((double) (branches[index].betasize-1));
-				double linearinterpol = branches[index].betanoise[floor(valindex)] * (1.0 - fmod(valindex, 1.0)) + branches[index].betanoise[ceil(valindex)] * fmod(valindex, 1.0);
+				double linearinterpol = BetaNoise::noises[branches[index].betanoiseindex][floor(valindex)] * (1.0 - fmod(valindex, 1.0)) + BetaNoise::noises[branches[index].betanoiseindex][ceil(valindex)] * fmod(valindex, 1.0);
 				glRotated(branches[index].current_angle[0] * (180.0/M_PI) + BRANCH_BETA_ROTATION_LIMIT_X * linearinterpol, 1, 0, 0);
                 glRotated(branches[index].current_angle[2] * (180.0/M_PI) + BRANCH_BETA_ROTATION_LIMIT_Z * linearinterpol, 0, 0, 1);
                 glTranslated(-branches[index].end_points.first[0], -branches[index].end_points.first[1], -branches[index].end_points.first[2]);

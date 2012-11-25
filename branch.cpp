@@ -9,6 +9,12 @@ const GLfloat Branch::mat_specular[] =
 const GLfloat Branch::high_shininess[] =
     { 100.0f };
 
+
+double randombranch(double min, double max)
+{
+    return min + ((double) rand() / RAND_MAX) * (max-min);
+}
+
 Branch::Branch()
 {
     end_points = make_pair(vec3(0,0,0), vec3(0,0,0));
@@ -87,8 +93,8 @@ void Branch :: set(vec3 start, vec3 end, double startt, double endt, int depth, 
 
     elastic_modulus = E_MODULUS;
 
-	betanoise = BetaNoise::librarynoise(ONEFBETA_2POW, ONEFBETA_BETA);
-	betasize = betanoise.size();
+	betanoiseindex = randombranch(0,9);
+	betasize = BetaNoise::noises[betanoiseindex].size();
 }
 
 void Branch :: addleaves(int leavesmax, bool printbeta)
