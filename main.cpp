@@ -16,7 +16,7 @@
 #include <stdlib.h>
 #include "data_structures.h"
 #include "Debug.h"
-
+#define SUBWINDOW_SQUARE 250
 // TIME
 long long now = TIME_CURRENT_MILLIS;
 
@@ -74,12 +74,12 @@ static void resize(int width, int height)
     glLoadIdentity() ;
 
     glutSetWindow(DirectionWindow);
-    glutPositionWindow(0, height-150);
-    glViewport(0, 0, 150, 150);
+    glutPositionWindow(0, height-SUBWINDOW_SQUARE);
+    glViewport(0, 0, SUBWINDOW_SQUARE, SUBWINDOW_SQUARE);
 
     glutSetWindow(WindWindow);
-    glutPositionWindow(0, height-300);
-    glViewport(0, 0, 150, 150);
+    glutPositionWindow(0, height-2*SUBWINDOW_SQUARE);
+    glViewport(0, 0, SUBWINDOW_SQUARE, SUBWINDOW_SQUARE);
 
 }
 
@@ -233,7 +233,7 @@ static void displaywind(void)
     gluLookAt(eye[0],eye[1],eye[2],0,0,0,0,1,0);
 
 	long long now = TIME_CURRENT_MILLIS;
-	int windsize = wind.windx.size();
+	int windsize = wind.windx.size() - 1;
 	double index = (windsize-1)*std::fmod((long double) now / 1000.0, (long double)WIND_TIME_PERIOD) / WIND_TIME_PERIOD;
 	//std::cout << index << std::endl;
     glPushMatrix();
@@ -241,16 +241,22 @@ static void displaywind(void)
 		glBegin(GL_LINE_STRIP);
 		glColor3f(1,0,0);
 		glVertex3f(-1.5,0.5*(wind.windx[std::floor(index)]*(1.0-std::fmod(index,1.0)) + wind.windx[std::ceil(index)]*std::fmod(index,1.0))/WIND_AMPLITUDE,0);
-		for(int i = 0; i<windsize; i++)
+		double divs = 100;
+		for(int i = 0; i<divs; i++)
 		{
-			glVertex3f(-1.5 + 3.0*(double) (i+1)/(windsize+2),0.5*wind.windx[i]/WIND_AMPLITUDE,0);		
+			double j = index + (double) i/divs*windsize;
+			if(j>=windsize)
+				j -= windsize;
+			//std::cout << "WINDSIZE : " <<windsize <<std::endl;
+			//std::cout << "J : " << j << std::endl;
+			int windx = wind.windx[std::floor(j)]*(1.0-std::fmod(j,1.0)) + wind.windx[std::ceil(j)]*std::fmod(j,1.0);
+			glVertex3f(-1.5 + (double) i/(divs + 2.0)*3.0, 0.5*windx/WIND_AMPLITUDE,0);		
 		}
 		glVertex3f(1.5,0.5*(wind.windx[std::floor(index)]*(1.0-std::fmod(index,1.0)) + wind.windx[std::ceil(index)]*std::fmod(index,1.0))/WIND_AMPLITUDE,0);
 		glEnd();
-        glBegin(GL_LINES);
+		glBegin(GL_POINTS);
             glColor3f(0,1,0);
-            glVertex3f(0,0.5,0);
-            glVertex3f(0,0,0);
+            glVertex3f(1.5,0.5*(wind.windx[std::floor(index)]*(1.0-std::fmod(index,1.0)) + wind.windx[std::ceil(index)]*std::fmod(index,1.0))/WIND_AMPLITUDE,0);
         glEnd();
         glDisable(GL_COLOR_MATERIAL);
     glPopMatrix();
@@ -361,13 +367,13 @@ int main(int argc, char *argv[])
     glLightfv(GL_LIGHT0, GL_POSITION, light_position);
     glDisable(GL_COLOR_MATERIAL);
 
-    DirectionWindow = glutCreateSubWindow(TreeWindow, 0, glutGet(GLUT_WINDOW_HEIGHT)-150, 150, 150);
+    DirectionWindow = glutCreateSubWindow(TreeWindow, 0, glutGet(GLUT_WINDOW_HEIGHT)-SUBWINDOW_SQUARE, SUBWINDOW_SQUARE, SUBWINDOW_SQUARE);
     glutDisplayFunc(displaydir);
     glutKeyboardFunc(key);
     glutSpecialFunc(specialKey);
 	//glutIdleFunc(dirredisplay);
 
-	WindWindow = glutCreateSubWindow(TreeWindow, 0, glutGet(GLUT_WINDOW_HEIGHT)-300,150,150);
+	WindWindow = glutCreateSubWindow(TreeWindow, 0, glutGet(GLUT_WINDOW_HEIGHT)-2*SUBWINDOW_SQUARE,SUBWINDOW_SQUARE,SUBWINDOW_SQUARE);
 	glutDisplayFunc(displaywind);
     glutKeyboardFunc(key);
     glutSpecialFunc(specialKey);
