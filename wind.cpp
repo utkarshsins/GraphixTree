@@ -6,10 +6,8 @@ Wind::Wind()
 	windx = std::vector<double>(60,WIND_AMPLITUDE);
 	windz = std::vector<double>(60,0);
 	type = WIND_TYPE_CONSTANT;
-	change_type();
-	change_type();
-	//for(int i =0; i<windx.size(); i++)
-	//	std::cout << windx[i] << std::endl;
+	/*for(int i =0; i<windx.size(); i++)
+		std::cout << windx[i] << std::endl;*/
 }
 
 double Wind :: force_at(int coord, long long now)

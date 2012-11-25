@@ -86,7 +86,7 @@ void vec3 :: tend_to(vec3 limit, vec3 inc, bool cond)
             values[i] += (limit[i] >= 0 ? inc[i] : -inc[i]);
 
         }
-        else if(cond && fabs(values[i]) > fabs(limit[i]))
+		else if(cond && fabs(values[i]) > fabs(limit[i]) && (fabs(values[i]) - fabs(limit[i]))*180.0/M_PI > 3)
         {
             values[i] -= (limit[i] >= 0 ? inc[i] : -inc[i]);
 

@@ -77,11 +77,17 @@ static void resize(int width, int height)
     glutPositionWindow(0, height-150);
     glViewport(0, 0, 150, 150);
 
+    glutSetWindow(WindWindow);
+    glutPositionWindow(0, height-300);
+    glViewport(0, 0, 150, 150);
+
 }
 
 static void redisplay(int value)
 {
 	glutSetWindow(DirectionWindow);
+	glutPostRedisplay();
+	glutSetWindow(WindWindow);
 	glutPostRedisplay();
 	glutSetWindow(TreeWindow);
 	glutPostRedisplay();
@@ -220,36 +226,31 @@ static void displaywind(void)
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    glOrtho(-1,1,-1,1,1,3);
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-    gluLookAt(0,0,-1,0,0,0,0,1,0);
-    xyz();
-
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    glFrustum(-direction_scale, direction_scale, -direction_scale, direction_scale, 3.0, 10.0);
+    glFrustum(-1, 1, -1, 1, 3.0, 10.0);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
     gluLookAt(eye[0],eye[1],eye[2],0,0,0,0,1,0);
 
+	long long now = TIME_CURRENT_MILLIS;
+	int windsize = wind.windx.size();
+	double index = (windsize-1)*std::fmod((long double) now / 1000.0, (long double)WIND_TIME_PERIOD) / WIND_TIME_PERIOD;
+	//std::cout << index << std::endl;
     glPushMatrix();
         glEnable(GL_COLOR_MATERIAL);
-        glBegin(GL_LINES);
-            glColor3f(1,0,0);
-            glVertex3f(0,0,0);
-            glVertex3f(1,0,0);
-        glEnd();
+		glBegin(GL_LINE_STRIP);
+		glColor3f(1,0,0);
+		glVertex3f(-1.5,0.5*(wind.windx[std::floor(index)]*(1.0-std::fmod(index,1.0)) + wind.windx[std::ceil(index)]*std::fmod(index,1.0))/WIND_AMPLITUDE,0);
+		for(int i = 0; i<windsize; i++)
+		{
+			glVertex3f(-1.5 + 3.0*(double) (i+1)/(windsize+2),0.5*wind.windx[i]/WIND_AMPLITUDE,0);		
+		}
+		glVertex3f(1.5,0.5*(wind.windx[std::floor(index)]*(1.0-std::fmod(index,1.0)) + wind.windx[std::ceil(index)]*std::fmod(index,1.0))/WIND_AMPLITUDE,0);
+		glEnd();
         glBegin(GL_LINES);
             glColor3f(0,1,0);
+            glVertex3f(0,0.5,0);
             glVertex3f(0,0,0);
-            glVertex3f(0,1,0);
-        glEnd();
-        glBegin(GL_LINES);
-            glColor3f(0,0,1);
-            glVertex3f(0,0,0);
-            glVertex3f(0,0,1);
         glEnd();
         glDisable(GL_COLOR_MATERIAL);
     glPopMatrix();
@@ -257,6 +258,11 @@ static void displaywind(void)
     glutSwapBuffers();
 }
 
+static void changewind(int button, int state, int x, int y)
+{
+	if(button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
+		wind.change_type();
+}
 
 static void specialKey(int key, int x, int y)
 {
@@ -288,11 +294,7 @@ static void specialKey(int key, int x, int y)
         eye[1] = eye_height;
         eye[2] = smaller_radius*cos(sideangle);
     }
-
-    glutSetWindow(TreeWindow);
-    glutPostRedisplay();
-    glutSetWindow(DirectionWindow);
-    glutPostRedisplay();
+	redisplay(0);
 }
 
 static void key(unsigned char key, int x, int y)
@@ -364,12 +366,13 @@ int main(int argc, char *argv[])
     glutKeyboardFunc(key);
     glutSpecialFunc(specialKey);
 	//glutIdleFunc(dirredisplay);
-	/*
-	WindWindow = glutCreateSubWindow(TreeWindow, 0, glutGet(GLUT_WINDOW_HEIGHT)-200,150,150);
+
+	WindWindow = glutCreateSubWindow(TreeWindow, 0, glutGet(GLUT_WINDOW_HEIGHT)-300,150,150);
 	glutDisplayFunc(displaywind);
     glutKeyboardFunc(key);
     glutSpecialFunc(specialKey);
-	*/
+	glutMouseFunc(changewind);
+
     glutSetWindow(TreeWindow);
 
     tree.makeTree();
