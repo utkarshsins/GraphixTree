@@ -54,6 +54,8 @@ const GLfloat light_specular[] = { 1.0f, 1.0f, 1.0f, 1.0f };
 const GLfloat light_position[] = { 2.0f, 5.0f, 5.0f, 0.0f };
 
 TreeSkeleton tree(4,4);
+TreeSkeleton tree2(4,4);
+bool twotrees = false;
 Wind wind;
 
 int TreeWindow, DirectionWindow, WindWindow;
@@ -124,7 +126,17 @@ static void display(void)
     //global_time += 1;
     glPushMatrix();
 	long long timenow = TIME_CURRENT_MILLIS;
-	tree.paint(timenow);
+	if(!twotrees)
+		tree.paint(timenow);
+	else
+	{
+		glPushMatrix();
+		glTranslated(2.0,0,0);
+		tree.paint(timenow);
+		glPopMatrix();
+		glTranslated(-1,0,-2);
+		tree2.paint(timenow);
+	}
     glPopMatrix();
 
 	#ifdef PROFILING
@@ -142,9 +154,10 @@ static void display(void)
 
 	// Next Frame
 	//if(wind.calculate_wind(fpstime))
-		tree.wind_listener(fpstime, wind);
-
+	tree.wind_listener(fpstime, wind);
 	tree.nextFrame();
+	tree2.wind_listener(fpstime, wind);
+	tree2.nextFrame();
 
 	#ifdef FPSLIMIT
 		long long fpsnow = TIME_CURRENT_MILLIS;
@@ -327,6 +340,9 @@ static void key(unsigned char key, int x, int y)
 		case 'b':
 			Branch::enablebeta = !Branch::enablebeta;
 			break;
+		case 't':
+			twotrees = !twotrees;
+			break;
 		case 27:
         case 'q':
             exit(0);
@@ -334,7 +350,7 @@ static void key(unsigned char key, int x, int y)
 
     }
 
-    glutPostRedisplay();
+    redisplay(0);
 }
 
 /* Program entry point */
@@ -394,6 +410,7 @@ int main(int argc, char *argv[])
 	
 	BetaNoise::generatenoises();
     tree.makeTree();
+	tree2.makeTree();
 
     glutMainLoop();
 
