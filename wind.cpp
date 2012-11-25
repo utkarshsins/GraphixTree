@@ -3,9 +3,9 @@
 
 Wind::Wind()
 {
-	windx = std::vector<double>(60,WIND_AMPLITUDE);
+	windx = std::vector<double>(60,0);
 	windz = std::vector<double>(60,0);
-	type = WIND_TYPE_CONSTANT;
+	type = WIND_TYPE_ZERO;
 	/*for(int i =0; i<windx.size(); i++)
 		std::cout << windx[i] << std::endl;*/
 }

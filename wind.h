@@ -5,9 +5,9 @@
 #include <cmath>
 #include <iostream>
 
-#define WIND_TYPE_CONSTANT 0
-#define WIND_TYPE_PULSE 1
-#define WIND_TYPE_ZERO 2
+#define WIND_TYPE_CONSTANT 1
+#define WIND_TYPE_PULSE 2
+#define WIND_TYPE_ZERO 0
 #define WIND_TYPE_SINSQUARE 3
 
 #define TOTAL_WIND_TYPES 4

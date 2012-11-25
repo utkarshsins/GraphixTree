@@ -15,7 +15,7 @@ double randombranch(double min, double max)
     return min + ((double) rand() / RAND_MAX) * (max-min);
 }
 
-bool Branch::enablebeta = true;
+bool Branch::enablebeta = false;
 
 Branch::Branch()
 {
