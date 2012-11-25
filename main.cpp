@@ -268,6 +268,8 @@ static void changewind(int button, int state, int x, int y)
 {
 	if(button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
 		wind.change_type();
+	else if(button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN)
+		wind.reverse_type();
 }
 
 static void specialKey(int key, int x, int y)
