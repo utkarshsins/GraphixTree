@@ -222,25 +222,28 @@ void TreeSkeleton :: paint(long long now)
         {
             glPushMatrix();
                 glTranslated(branches[index].end_points.first[0], branches[index].end_points.first[1], branches[index].end_points.first[2]);
-				double valindex = val * ((double) (branches[index].betasize-1));
-				double linearinterpol = BetaNoise::noises[branches[index].betanoiseindex][floor(valindex)] * (1.0 - fmod(valindex, 1.0)) + BetaNoise::noises[branches[index].betanoiseindex][ceil(valindex)] * fmod(valindex, 1.0);
 				if(Branch::enablebeta)
 				{
-					glRotated(branches[index].current_angle[0] * (180.0/M_PI) + BRANCH_BETA_ROTATION_LIMIT_X * linearinterpol, 1, 0, 0);
-					glRotated(branches[index].current_angle[2] * (180.0/M_PI) + BRANCH_BETA_ROTATION_LIMIT_Z * linearinterpol, 0, 0, 1);
-				}
-				else
-				{
-					glRotated(branches[index].current_angle[0] * (180.0/M_PI), 1, 0, 0);
-					glRotated(branches[index].current_angle[2] * (180.0/M_PI), 0, 0, 1);
-				}		
-                glTranslated(-branches[index].end_points.first[0], -branches[index].end_points.first[1], -branches[index].end_points.first[2]);
-				#ifdef DEBUG_SINGLE_LEAF
-				branches[index].paint(val,index==1);
-				#else
-                branches[index].paint(val);
-				#endif
-            rendered[index] = true;
+					double bent_beta_modifier = (1.0 + 200.0 * (fabs((double) branches[index].current_angle[0])) / (double) branches[index].max_bent_angle[0]);
+					//double valindex = fmod(bent_beta_modifier * val, 1.0) * ((double) (branches[index].betasize-1));
+					//std::cout << "BENT : " << bent_beta_modifier << "\t\t\t\tVALINDEX : " << valindex << std::endl;
+					double valindex = val * ((double) (branches[index].betasize-1));
+					double linearinterpol = BetaNoise::noises[branches[index].betanoiseindex][floor(valindex)] * (1.0 - fmod(valindex, 1.0)) + BetaNoise::noises[branches[index].betanoiseindex][ceil(valindex)] * fmod(valindex, 1.0);
+					glRotated(branches[index].current_angle[0] * (180.0/M_PI) + bent_beta_modifier * BRANCH_BETA_ROTATION_LIMIT_X * linearinterpol, 1, 0, 0);
+						glRotated(branches[index].current_angle[2] * (180.0/M_PI) + bent_beta_modifier * BRANCH_BETA_ROTATION_LIMIT_Z * linearinterpol, 0, 0, 1);
+					}
+					else
+					{
+						glRotated(branches[index].current_angle[0] * (180.0/M_PI), 1, 0, 0);
+						glRotated(branches[index].current_angle[2] * (180.0/M_PI), 0, 0, 1);
+					}		
+					glTranslated(-branches[index].end_points.first[0], -branches[index].end_points.first[1], -branches[index].end_points.first[2]);
+					#ifdef DEBUG_SINGLE_LEAF
+					branches[index].paint(val,index==1);
+					#else
+					branches[index].paint(val);
+					#endif
+					rendered[index] = true;
 
             if(f > 1)
             {
