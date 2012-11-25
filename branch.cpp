@@ -188,7 +188,7 @@ void Branch :: paint(double leaf_time)
 
         Leaf::setMaterial();
 
-		if(RENDER_LEAVES)
+		if(Leaf::render_leaves)
 		{
 			int istart = 0;
 

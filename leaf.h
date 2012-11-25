@@ -47,6 +47,8 @@ class Leaf
         static const float mat_specular[];
         static const float high_shininess[];
 
+		static bool render_leaves;
+
 		std::vector<double> onefbeta;
 };
 #endif /* __LEAF_H__ */

@@ -263,6 +263,11 @@ static void displaywind(void)
 
     glutSwapBuffers();
 }
+static void toggleleaf(int button, int state, int x, int y)
+{
+	if(button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
+		Leaf::render_leaves = !Leaf::render_leaves;
+}
 
 static void changewind(int button, int state, int x, int y)
 {
@@ -350,6 +355,7 @@ int main(int argc, char *argv[])
     glutKeyboardFunc(key);
     //glutIdleFunc(idle);
     glutSpecialFunc(specialKey);
+	glutMouseFunc(toggleleaf);
 
     glClearColor(1,1,1,1);
     glEnable(GL_CULL_FACE);

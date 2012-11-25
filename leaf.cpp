@@ -4,6 +4,7 @@ const float Leaf::mat_ambient[]    = { 0.0f, 1.0f, 0.0f, 1.0f };
 const float Leaf::mat_diffuse[]    = { 0.0f, 1.0f, 0.0f, 1.0f };
 const float Leaf::mat_specular[]   = { 0.0f, 1.0f, 0.0f, 1.0f };
 const float Leaf::high_shininess[] = { 100.0f };
+bool Leaf::render_leaves = RENDER_LEAVES;
 
 double random(double min, double max)
 {
@@ -38,7 +39,6 @@ void Leaf::set(double length, bool value)
     length_fraction = random(0,length);
     thetabranch = random(30,90);
     thetabranch360 = random(0,360);
-    if(RENDER_LEAVES)
 	onefbeta = BetaNoise::librarynoise(ONEFBETA_2POW, ONEFBETA_BETA);
 
 	#ifdef DEBUG_LEAF_BETA
