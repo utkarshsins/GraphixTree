@@ -56,13 +56,13 @@ bool Wind :: change_type()
 			windx[size-1] = 0;
 			break;
 	}
-	return true;
+	return type == WIND_TYPE_SINSQUARE;
 }
 
 bool Wind :: reverse_type()
 {
 	type -= 2;
-	return change_type();
+	return type == WIND_TYPE_SINSQUARE;
 }
 
 bool Wind :: calculate_wind(long long now)

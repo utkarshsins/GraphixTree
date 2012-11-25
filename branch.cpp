@@ -16,6 +16,7 @@ double randombranch(double min, double max)
 }
 
 bool Branch::enablebeta = false;
+bool Branch::sin2 = false;
 
 Branch::Branch()
 {

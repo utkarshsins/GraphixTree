@@ -243,7 +243,7 @@ static void displaywind(void)
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
-    gluLookAt(eye[0],eye[1],eye[2],0,0,0,0,1,0);
+    gluLookAt(0,0,5,0,0,0,0,1,0);
 
 	long long now = TIME_CURRENT_MILLIS;
 	int windsize = wind.windx.size() - 1;
@@ -285,9 +285,15 @@ static void toggleleaf(int button, int state, int x, int y)
 static void changewind(int button, int state, int x, int y)
 {
 	if(button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
-		wind.change_type();
+		if(wind.change_type())
+			Branch::sin2 = true;
+		else
+			Branch::sin2 = false;
 	else if(button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN)
-		wind.reverse_type();
+		if(wind.reverse_type())
+			Branch::sin2 = true;
+		else
+			Branch::sin2 = false;
 }
 
 static void specialKey(int key, int x, int y)

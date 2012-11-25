@@ -50,6 +50,7 @@ class Branch
 		int betanoiseindex;
 		int betasize;
 		static bool enablebeta;
+		static bool sin2;
 
         Branch();
         Branch(vec3 , vec3 , int );
