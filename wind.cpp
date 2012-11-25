@@ -40,6 +40,13 @@ bool Wind :: change_type()
 				windz[i] = 0;
 			}
 			break;
+		case WIND_TYPE_ZERO:
+			for(int i = 0; i<size; i++)
+			{
+				windx[i] = 0;
+				windz[i] = 0;
+			}
+			break;
 		case WIND_TYPE_SINSQUARE:
 			for(int i=0; i<size; i++)
 			{
@@ -50,6 +57,12 @@ bool Wind :: change_type()
 			break;
 	}
 	return true;
+}
+
+bool Wind :: reverse_type()
+{
+	type -= 2;
+	return change_type();
 }
 
 bool Wind :: calculate_wind(long long now)

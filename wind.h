@@ -7,9 +7,10 @@
 
 #define WIND_TYPE_CONSTANT 0
 #define WIND_TYPE_PULSE 1
-#define WIND_TYPE_SINSQUARE 2
+#define WIND_TYPE_ZERO 2
+#define WIND_TYPE_SINSQUARE 3
 
-#define TOTAL_WIND_TYPES 3
+#define TOTAL_WIND_TYPES 4
 #define WIND_AMPLITUDE 5.0
 
 #define WIND_TIME_PERIOD 60.0
@@ -23,6 +24,7 @@ class Wind
     public:
         Wind();
 		bool change_type();
+		bool reverse_type();
         double force_at(int, long long);
 		int type;
 		std::vector<double> windx, windz;		
