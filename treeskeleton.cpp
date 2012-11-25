@@ -152,7 +152,7 @@ void TreeSkeleton :: nextFrame()
 		#endif
 		//if(branches[i].bent_angle_changed)
 		//{
-        branches[i].current_angle.tend_to(branches[i].bent_angle, vec3(BRANCH_ROTATION_PER_FRAME, BRANCH_ROTATION_PER_FRAME, BRANCH_ROTATION_PER_FRAME), branches[i].bent_angle_changed);
+        branches[i].current_angle.tend_to(branches[i].bent_angle, vec3(BRANCH_ROTATION_PER_FRAME, BRANCH_ROTATION_PER_FRAME, BRANCH_ROTATION_PER_FRAME));//, branches[i].bent_angle_changed);
 
 		//}
 		/*

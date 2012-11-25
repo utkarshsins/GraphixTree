@@ -45,7 +45,7 @@ class vec3
         double value();
         void set(double , double , double);
         void printvec();
-        void tend_to(vec3 limit, vec3 inc, bool );
+        void tend_to(vec3 limit, vec3 inc );
         //void decrease(vec3 limit, vec3 inc);
         vec3 operator + (const vec3 &c) const;
         vec3 operator - (const vec3 &c) const;
